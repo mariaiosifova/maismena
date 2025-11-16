@@ -1,620 +1,84 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap');
-        * {
-    padding: 0%;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-.title {
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 650;
-    font-style: normal;
-    letter-spacing: -2px;
-    color: #dfdede;
-}
-
-body {
-
-
-    align-items: center;
-    min-height: 100vh;
-}
-
-.text {
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 650;
-    font-style: normal;
-    letter-spacing: -2px;
-    font-size: 65px;
-    color: #000000;
-}
-
-.description {
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 500;
-    font-style: normal;
-    font-size: 25px;
-    color: #000000;
-}
-
-.reg-btn {
-    background-color: rgb(32, 153, 252);
-    border-radius: 15px;
-    padding: 12px;
-    stroke-width: 0px;
-    font-size: 25px;
-    border: none;
-    margin: 10px;
-    margin-left: 0px;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 550;
-    font-style: normal;
-    letter-spacing: 0px;
-    color: #000000;
-    align-self: flex-start;
-}
-
-.reg-btn:hover {
-    background-color: rgb(0, 0, 0);
-    border-radius: 15px;
-    padding: 12px;
-    stroke-width: 0px;
-    font-size: 25px;
-    border: none;
-    margin: 10px;
-    margin-left: 0px;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 550;
-    font-style: normal;
-    letter-spacing: 0px;
-    color: #e4e2e2;
-    align-self: flex-start;
-}
-
-.sign-btn {
-    background-color: rgb(208, 210, 211);
-    border-radius: 15px;
-    padding: 12px;
-    padding-left: 25px;
-    padding-right: 25px;
-    stroke-width: 0px;
-    font-size: 25px;
-    border: none;
-    margin: 10px;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 550;
-    font-style: normal;
-    letter-spacing: 0px;
-    color: #000000;
-    align-self: flex-start;
-}
-
-.sign-btn:hover {
-    background-color: rgb(0, 0, 0);
-    border-radius: 15px;
-    padding: 12px;
-    padding-left: 25px;
-    padding-right: 25px;
-    stroke-width: 0px;
-    font-size: 25px;
-    border: none;
-    margin: 10px;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 550;
-    font-style: normal;
-    letter-spacing: 0px;
-    color: #ffffff;
-    align-self: flex-start;
-}
-
-.sign-btn-inbar {
-    background-color: rgb(220, 223, 227);
-    border-radius: 10px;
-    padding: 8px;
-    padding-left: 18px;
-    padding-right: 18px;
-    stroke-width: 0px;
-    font-size: 18px;
-    border: none;
-    margin: 4px;
-    margin-left: 0px;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 550;
-    font-style: normal;
-    letter-spacing: 0px;
-    color: #000000;
-}
-
-.sign-btn-inbar:hover {
-    background-color: rgb(32, 153, 252);
-    border-radius: 10px;
-    padding: 8px;
-    padding-left: 18px;
-    padding-right: 18px;
-    stroke-width: 0px;
-    font-size: 18px;
-    border: none;
-    margin: 4px;
-    margin-left: 0px;
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 550;
-    font-style: normal;
-    letter-spacing: 0px;
-    color: #ffffff;
-}
-
-.refactor {
-    max-width: 100%;
-    height: auto;
-}
-
-.top-nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #161616;
-    padding: 8px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
-}
-
-.logo {
-    margin-right: 10px;
-    margin-left: 2px;
-}
-
-.carousel-container {
-    max-width: 900px;
-    width: 100%;
-    position: relative;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    /* Добавь эти свойства: */
-    margin: 0 auto;
-    display: block;
-}
-.carousel-track {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    height: 500px;
-}
-
-.carousel-slide {
-    position: relative;
-    min-width: 100%;
-    height: 100%;
-}
-
-.carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.slide-gradient {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 60%;
-    background: linear-gradient(to top,
-            rgba(0, 0, 0, 0.9) 0%,
-            rgba(0, 0, 0, 0.6) 40%,
-            rgba(0, 0, 0, 0.3) 70%,
-            transparent 100%);
-    pointer-events: none;
-}
-
-.slide-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 30px;
-    color: white;
-    z-index: 10;
-}
-
-.slide-title {
-    font-size: 2.2rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-}
-
-.slide-description {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    opacity: 0.95;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-    max-width: 80%;
-}
-
-.carousel-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px;
-    z-index: 20;
-}
-
-.nav-btn {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 24px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    color: #333;
-    user-select: none;
-}
-
-.nav-btn:hover {
-    background: white;
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-}
-
-.nav-btn:active {
-    transform: scale(0.95);
-}
-
-.carousel-indicators {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 20;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 15px;
-    border-radius: 20px;
-}
-
-.indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.indicator.active {
-    background: white;
-    transform: scale(1.2);
-}
-
-@media (max-width: 768px) {
-    .carousel-container {
-        max-width: 100%;
-    }
-
-    .carousel-track {
-        height: 400px;
-    }
-
-    .slide-title {
-        font-size: 1.8rem;
-    }
-
-    .slide-description {
-        font-size: 1rem;
-        max-width: 100%;
-    }
-
-    .nav-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .carousel-track {
-        height: 300px;
-    }
-
-    .slide-title {
-        font-size: 1.5rem;
-    }
-
-    .slide-content {
-        padding: 20px;
-    }
-
-    .nav-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-        padding: 0;
-    }
-
-    .carousel-nav {
-        padding: 0 10px;
-    }
-}
-    </style>
     <meta charset="UTF-8">
     <title>МАИ Смена</title>
     <link rel="icon" type="image/png" href="mai_logo.png">
     <link rel="stylesheet" href="css/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords"
-        content="маи, маи смена, смена, работа, маи работа, топс, маи топс, москва работа, вакансии маи">
+    <meta name="keywords" content="маи, маи смена, смена, работа, маи работа, топс, маи топс, москва работа, вакансии маи">
 </head>
 
-<body background-color: aliceblue;>
-    <div style="background-color: rgb(241, 241, 241);">
-        <div class="top-nav">
-            <img class="logo" src="images/logo.png" alt="Логотип" width="35px" height="35px">
-            <h1 class="title">МАИ Смена</h1>
-            <button class="sign-btn-inbar">Войти</button>
-        </div>
-
-        <div style="margin-top: 20px; margin-left: 10px; flex-direction: column;
-    display: flex;">
-            <h1 class="text">Добро пожаловать в МАИ Смена!</h1>
-            <h2 class="description">Сервис позволяет удобно искать вакансии и записываться на них</h2>
-
-            <div><button class="reg-btn" id="reg-btn">Зарегистрироваться</button>
-                <button class="sign-btn">Войти</button>
+<body>
+    <div class="page">
+        <!-- Шапка -->
+        <header class="header">
+            <div class="header__container">
+                <img class="header__logo" src="images/logo.png" alt="Логотип МАИ Смена" width="35" height="35">
+                <h1 class="header__title">МАИ Смена</h1>
+                <button class="button button--header-login">Войти</button>
             </div>
-            <h2 class="description">Возможности сервиса:</h2>
-        </div>
-        <div class="carousel-container">
-            <div class="carousel-track">
-                <!-- Слайд 1 -->
-                <div class="carousel-slide">
-                    <img src="images/image1.jpg" alt="Горный пейзаж">
-                    <div class="slide-gradient"></div>
-                    <div class="slide-content">
-                        <h2 class="slide-title">Горные вершины</h2>
-                        <p class="slide-description">Величественные горы, покрытые вечными снегами, в лучах закатного
-                            солнца. Идеальное место для настоящих путешественников.</p>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main">
+            <section class="hero">
+                <div class="hero__container">
+                    <h1 class="hero__title">Добро пожаловать в МАИ Смена!</h1>
+                    <p class="hero__description">Сервис позволяет удобно искать вакансии и записываться на них</p>
+                    
+                    <div class="hero__actions">
+                        <button class="button button--primary button--large" id="reg-btn">Зарегистрироваться</button>
+                        <button class="button button--secondary button--large">Войти</button>
+                    </div>
+                    
+                    <h2 class="hero__subtitle">Возможности сервиса:</h2>
+                </div>
+            </section>
+
+            <!-- Карусель -->
+            <section class="carousel-section">
+                <div class="carousel">
+                    <div class="carousel__track">
+                        <!-- Слайд 1 -->
+                        <div class="carousel__slide">
+                            <img class="carousel__image" src="images/image1.jpg" alt="Горный пейзаж">
+                            <div class="carousel__gradient"></div>
+                            <div class="carousel__content">
+                                <h2 class="carousel__title">Горные вершины</h2>
+                                <p class="carousel__description">Величественные горы, покрытые вечными снегами, в лучах закатного солнца.</p>
+                            </div>
+                        </div>
+
+                        <!-- Слайд 2 -->
+                        <div class="carousel__slide">
+                            <img class="carousel__image" src="images/image2.jpg" alt="Лесной пейзаж">
+                            <div class="carousel__gradient"></div>
+                            <div class="carousel__content">
+                                <h2 class="carousel__title">Зеленый лес</h2>
+                                <p class="carousel__description">Тихий лес с вековыми деревьями, где каждый шаг открывает новые тайны природы.</p>
+                            </div>
+                        </div>
+
+                        <!-- Остальные слайды... -->
+                    </div>
+
+                    <!-- Навигация -->
+                    <div class="carousel__nav">
+                        <button class="carousel__button carousel__button--prev">❮</button>
+                        <button class="carousel__button carousel__button--next">❯</button>
+                    </div>
+
+                    <!-- Индикаторы -->
+                    <div class="carousel__indicators">
+                        <!-- Индикаторы добавляются через JS -->
                     </div>
                 </div>
-
-                <!-- Слайд 2 -->
-                <div class="carousel-slide">
-                    <img src="images/image2.jpg" alt="Лесной пейзаж">
-                    <div class="slide-gradient"></div>
-                    <div class="slide-content">
-                        <h2 class="slide-title">Зеленый лес</h2>
-                        <p class="slide-description">Тихий лес с вековыми деревьями, где каждый шаг открывает новые
-                            тайны природы и дарит ощущение покоя.</p>
-                    </div>
-                </div>
-
-                <!-- Слайд 3 -->
-                <div class="carousel-slide">
-                    <img src="images/image3.jpg" alt="Озеро">
-                    <div class="slide-gradient"></div>
-                    <div class="slide-content">
-                        <h2 class="slide-title">Кристальное озеро</h2>
-                        <p class="slide-description">Прозрачная вода, отражающая небо и окружающие горы. Место, где
-                            время останавливается, а душа обретает гармонию.</p>
-                    </div>
-                </div>
-
-                <!-- Слайд 4 -->
-                <div class="carousel-slide">
-                    <img src="images/image4.jpg" alt="Пляж">
-                    <div class="slide-gradient"></div>
-                    <div class="slide-content">
-                        <h2 class="slide-title">Золотой пляж</h2>
-                        <p class="slide-description">Бескрайние песчаные пляжи, ласковые волны и теплый бриз. Идеальное
-                            место для отдыха и релаксации.</p>
-                    </div>
-                </div>
-
-                <!-- Слайд 5 -->
-                <div class="carousel-slide">
-                    <img src="images/image5.jpg" alt="Архитектура">
-                    <div class="slide-gradient"></div>
-                    <div class="slide-content">
-                        <h2 class="slide-title">Городские огни</h2>
-                        <p class="slide-description">Современная архитектура и яркие огни большого города, где жизнь
-                            никогда не останавливается.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Навигация -->
-            <div class="carousel-nav">
-                <button class="nav-btn prev">❮</button>
-                <button class="nav-btn next">❯</button>
-            </div>
-
-            <!-- Индикаторы -->
-            <div class="carousel-indicators">
-                <!-- Индикаторы будут добавлены через JavaScript -->
-            </div>
-        </div>
-    </div>
+            </section>
+        </main>
     </div>
 
-    <script>
-        class Carousel {
-            constructor(container) {
-                this.container = container;
-                this.track = container.querySelector('.carousel-track');
-                this.slides = Array.from(container.querySelectorAll('.carousel-slide'));
-                this.prevBtn = container.querySelector('.prev');
-                this.nextBtn = container.querySelector('.next');
-                this.indicatorsContainer = container.querySelector('.carousel-indicators');
-
-                this.currentSlide = 0;
-                this.totalSlides = this.slides.length;
-                this.isAnimating = false;
-                this.autoPlayInterval = null;
-                this.autoPlayDelay = 4000; // 4 секунды
-
-                this.init();
-            }
-
-            init() {
-                // Создаем индикаторы
-                this.createIndicators();
-
-                // Обработчики кнопок
-                this.prevBtn.addEventListener('click', () => this.prev());
-                this.nextBtn.addEventListener('click', () => this.next());
-
-                // Клавиатура
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowLeft') this.prev();
-                    if (e.key === 'ArrowRight') this.next();
-                });
-
-                // Swipe для мобильных устройств
-                this.setupSwipe();
-
-                // Запускаем автопрокрутку
-                this.startAutoPlay();
-
-                // Обновляем отображение
-                this.updateDisplay();
-            }
-
-            createIndicators() {
-                // Очищаем контейнер индикаторов
-                this.indicatorsContainer.innerHTML = '';
-
-                // Создаем индикаторы для каждого слайда
-                for (let i = 0; i < this.totalSlides; i++) {
-                    const indicator = document.createElement('button');
-                    indicator.className = 'indicator';
-                    if (i === 0) indicator.classList.add('active');
-                    indicator.dataset.slide = i;
-
-                    indicator.addEventListener('click', () => {
-                        this.goToSlide(i);
-                    });
-
-                    this.indicatorsContainer.appendChild(indicator);
-                }
-
-                this.indicators = Array.from(this.indicatorsContainer.querySelectorAll('.indicator'));
-            }
-
-            goToSlide(index) {
-                if (this.isAnimating || index === this.currentSlide) return;
-
-                this.isAnimating = true;
-                this.currentSlide = index;
-                this.updateDisplay();
-
-                // Сбрасываем анимацию через время перехода
-                setTimeout(() => {
-                    this.isAnimating = false;
-                }, 500);
-            }
-
-            next() {
-                const nextSlide = (this.currentSlide + 1) % this.totalSlides;
-                this.goToSlide(nextSlide);
-            }
-
-            prev() {
-                const prevSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
-                this.goToSlide(prevSlide);
-            }
-
-            updateDisplay() {
-                // Плавное перемещение
-                this.track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
-
-                // Обновляем индикаторы
-                this.indicators.forEach((indicator, index) => {
-                    indicator.classList.toggle('active', index === this.currentSlide);
-                });
-            }
-
-            startAutoPlay() {
-                this.stopAutoPlay();
-
-                this.autoPlayInterval = setInterval(() => {
-                    this.next();
-                }, this.autoPlayDelay);
-            }
-
-            stopAutoPlay() {
-                if (this.autoPlayInterval) {
-                    clearInterval(this.autoPlayInterval);
-                    this.autoPlayInterval = null;
-                }
-            }
-
-            setupSwipe() {
-                let startX = 0;
-                let currentX = 0;
-                let isSwiping = false;
-
-                this.container.addEventListener('touchstart', (e) => {
-                    startX = e.touches[0].clientX;
-                    isSwiping = true;
-                    this.stopAutoPlay();
-                });
-
-                this.container.addEventListener('touchmove', (e) => {
-                    if (!isSwiping) return;
-                    currentX = e.touches[0].clientX;
-                });
-
-                this.container.addEventListener('touchend', () => {
-                    if (!isSwiping) return;
-
-                    const diff = startX - currentX;
-                    const swipeThreshold = 50;
-
-                    if (Math.abs(diff) > swipeThreshold) {
-                        if (diff > 0) {
-                            this.next();
-                        } else {
-                            this.prev();
-                        }
-                    }
-
-                    isSwiping = false;
-                    this.startAutoPlay();
-                });
-            }
-        }
-
-        // Инициализация карусели при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            new Carousel(document.querySelector('.carousel-container'));
-        });
-    </script>
+    <script src="js/carousel.js"></script>
+    <script src="js/main.js"></script>
 </body>
-
 </html>
