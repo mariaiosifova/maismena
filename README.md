@@ -1,2 +1,2 @@
-# maismena
-Hello! It is our volunteer project for Moscow aviation institute
+# MAI SMENA
+Hello! It is our volunteer project for Moscow Aviation Institute
