@@ -71,7 +71,7 @@ body {
 }
 
 .hero__title {
-    font-size: clamp(3rem, 10vw, 4.5rem); /* Увеличил на мобильных */
+    font-size: clamp(3rem, 10vw, 4.5rem);
     font-weight: 650;
     letter-spacing: -2px;
     color: #000000;
@@ -81,7 +81,7 @@ body {
 }
 
 .hero__description {
-    font-size: clamp(1.3rem, 4vw, 1.6rem); /* Увеличил на мобильных */
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
     font-weight: 500;
     color: #000000;
     margin-bottom: 25px;
@@ -98,7 +98,7 @@ body {
 }
 
 .hero__subtitle {
-    font-size: clamp(1.3rem, 4vw, 1.6rem); /* Увеличил на мобильных */
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
     font-weight: 500;
     color: #000000;
     padding-top: 10%;
@@ -131,12 +131,11 @@ body {
     box-shadow: none;
 }
 
-/* УВЕЛИЧИЛ основные кнопки */
 .button--primary {
     background-color: rgb(32, 153, 252);
     color: #000000;
-    padding: 15px 30px; /* Увеличил padding */
-    font-size: 28px; /* Увеличил размер шрифта */
+    padding: 15px 30px;
+    font-size: 28px;
 }
 
 .button--primary:hover {
@@ -147,8 +146,8 @@ body {
 .button--secondary {
     background-color: rgb(208, 210, 211);
     color: #000000;
-    padding: 15px 30px; /* Увеличил padding */
-    font-size: 28px; /* Увеличил размер шрифта */
+    padding: 15px 30px;
+    font-size: 28px;
 }
 
 .button--secondary:hover {
@@ -156,12 +155,12 @@ body {
     color: #ffffff;
 }
 
-/* УМЕНЬШИЛ кнопку Войти еще сильнее */
+/* УВЕЛИЧИЛ кнопку Войти в шапке */
 .button--header-login {
     background-color: rgb(220, 223, 227);
     border-radius: 10px;
-    padding: 5px 12px; /* Уменьшил еще больше */
-    font-size: 14px; /* Уменьшил еще больше */
+    padding: 8px 20px; /* Увеличил padding */
+    font-size: 18px; /* Увеличил размер шрифта */
     color: #000000;
     white-space: nowrap;
 }
@@ -180,7 +179,7 @@ body {
     padding: 20px var(--container-padding);
 }
 
-/* ИСПРАВЛЕННЫЕ стили для модального окна */
+/* Стили для модального окна */
 .modal {
     display: none;
     position: fixed;
@@ -190,37 +189,37 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px); /* Добавил размытие фона */
-}
-.modal-content {
-    background-color: white;
-    margin: 5% auto; /* Уменьшил отступ сверху */
-    padding: 35px; /* Увеличил padding */
-    border-radius: 20px; /* Увеличил скругление */
-    width: 450px; /* Увеличил ширину */
-    max-width: 95%; /* Увеличил максимальную ширину */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3); /* Усилил тень */
-    position: relative;
-    border: 2px solid #f0f0f0; /* Добавил тонкую границу */
+    backdrop-filter: blur(5px);
 }
 
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 35px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 95%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+    border: 2px solid #f0f0f0;
+}
 .modal-content h2 {
     text-align: center;
-    margin-bottom: 30px; /* Увеличил отступ */
-    font-size: 32px; /* Увеличил размер */
-    font-weight: 700; /* Увеличил жирность */
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 700;
     color: #000000;
 }
 
 .close {
     color: #666;
     float: right;
-    font-size: 30px; /* Увеличил размер */
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
     position: absolute;
-    right: 25px; /* Увеличил отступ */
-    top: 20px; /* Увеличил отступ */
+    right: 25px;
+    top: 20px;
     transition: color 0.3s ease;
 }
 
@@ -229,22 +228,22 @@ body {
 }
 
 .form-group {
-    margin-bottom: 25px; /* Увеличил отступ */
+    margin-bottom: 25px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 10px; /* Увеличил отступ */
-    font-weight: 600; /* Увеличил жирность */
+    margin-bottom: 10px;
+    font-weight: 600;
     color: #000000;
-    font-size: 16px; /* Фиксированный размер */
+    font-size: 16px;
 }
 
 .form-group input {
     width: 100%;
-    padding: 15px; /* Увеличил padding */
+    padding: 15px;
     border: 2px solid #e0e0e0;
-    border-radius: 10px; /* Увеличил скругление */
+    border-radius: 10px;
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
     font-size: 16px;
@@ -261,11 +260,11 @@ body {
 
 #registration-form .button {
     width: 100%;
-    padding: 18px; /* Увеличил padding */
+    padding: 18px;
     font-size: 18px;
     font-weight: 600;
-    border-radius: 12px; /* Увеличил скругление */
-    margin-top: 15px; /* Увеличил отступ */
+    border-radius: 12px;
+    margin-top: 15px;
     background-color: rgb(32, 153, 252);
     color: #000000;
     border: none;
@@ -310,14 +309,12 @@ body {
         text-align: center;
     }
     
-    /* Основные кнопки на планшетах */
     .button--primary,
     .button--secondary {
-        font-size: 26px; /* Чуть меньше, но все еще большие */
+        font-size: 26px;
         padding: 14px 28px;
     }
     
-    /* Модальное окно на планшетах */
     .modal-content {
         width: 90%;
         margin: 10% auto;
@@ -328,32 +325,38 @@ body {
 /* Телефоны */
 @media (max-width: 480px) {
     :root {
-        --container-padding: 4%;
+        --container-padding: 3%; /* Уменьшил отступы в шапке */
     }
     
     .header {
         height: auto;
         min-height: 60px;
+        padding: 8px var(--container-padding); /* Применяем уменьшенные отступы */
+    }
+    
+    /* Увеличил заголовок МАИ Смена в шапке на телефоне */
+    .header__title {
+        font-size: 1.5rem; /* Увеличил размер */
+        letter-spacing: -1px;
     }
     
     .hero {
         padding: 15px var(--container-padding);
     }
     
-    /* Основные кнопки на телефонах */
     .button--primary,
     .button--secondary {
-        font-size: 24px; /* Большие кнопки на телефоне */
+        font-size: 24px;
         padding: 12px 25px;
     }
     
-    /* Кнопка "Войти" остается маленькой на телефоне */
-    .button--header-login {
-        font-size: 14px;
-        padding: 5px 12px;
+    /* Кнопка "Войти" на основной странице - меняем длину под текст */
+    .button--secondary {
+        width: auto; /* Ширина по содержимому */
+        min-width: 120px; /* Минимальная ширина */
+        padding: 12px 20px; /* Подбираем под текст */
     }
     
-    /* Модальное окно на телефонах */
     .modal-content {
         width: 95%;
         margin: 15% auto;
@@ -374,30 +377,35 @@ body {
         font-size: 17px;
     }
 }
+
 /* Очень маленькие телефоны */
 @media (max-width: 320px) {
     :root {
-        --container-padding: 3%;
+        --container-padding: 2%; /* Еще меньше отступы на очень маленьких телефонах */
     }
     
     .hero__title {
-        font-size: 2.5rem; /* Увеличил минимальный размер */
+        font-size: 2.5rem;
     }
     
     .hero__description {
-        font-size: 1.2rem; /* Увеличил минимальный размер */
+        font-size: 1.2rem;
     }
     
-    /* Основные кнопки на очень маленьких телефонах */
     .button--primary,
     .button--secondary {
         font-size: 22px;
         padding: 10px 22px;
     }
     
-    .button--header-login {
-        font-size: 13px;
-        padding: 4px 10px;
+    /* Кнопка "Войти" на основной странице на очень маленьких телефонах */
+    .button--secondary {
+        min-width: 110px;
+        padding: 10px 18px;
+    }
+    
+    .header__title {
+        font-size: 1.4rem; /* Немного меньше на очень маленьких экранах */
     }
     
     .modal-content {
