@@ -8,7 +8,7 @@
 }
 
 :root {
-    --container-padding: 5%;
+    --container-padding: 3%; /* Уменьшил с 5% до 3% */
 }
 
 body {
@@ -146,8 +146,8 @@ body {
 .button--header-login {
     background-color: rgb(220, 223, 227);
     border-radius: 10px;
-    padding: 6px 15px; /* Уменьшенный padding */
-    font-size: 16px; /* Уменьшенный размер шрифта */
+    padding: 6px 15px;
+    font-size: 16px;
     color: #000000;
     white-space: nowrap;
 }
@@ -215,13 +215,13 @@ body {
 .form-group {
     margin-bottom: 20px;
 }
+
 .form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 550;
     color: #000000;
 }
-
 .form-group input {
     width: 100%;
     padding: 12px;
@@ -248,6 +248,20 @@ body {
 }
 
 /* ===== АДАПТИВНЫЕ СТИЛИ ===== */
+
+/* Большие компьютеры - еще меньше отступы */
+@media (min-width: 1200px) {
+    :root {
+        --container-padding: 2%; /* Еще меньше на больших экранах */
+    }
+}
+
+/* Очень большие экраны */
+@media (min-width: 1920px) {
+    :root {
+        --container-padding: 10%; /* Больше отступы на очень широких экранах */
+    }
+}
 
 /* Планшеты */
 @media (max-width: 768px) {
