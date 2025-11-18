@@ -64,6 +64,7 @@ body {
 .hero__container {
     display: flex;
     flex-direction: column;
+    padding: 2%;
 }
 
 .hero__title {
@@ -72,7 +73,6 @@ body {
     letter-spacing: -2px;
     color: #000000;
     margin-bottom: 10px;
-    padding-left: 10px;
 }
 
 .hero__description {
