@@ -48,7 +48,7 @@ class Router {
     // Загружаем HTML шаблон
     async loadTemplate(templateId) {
         try {
-            const response = await fetch(`templates/${templateId}.html`);
+            const response = await fetch(`pages/${templateId}.html`);
             return await response.text();
         } catch (error) {
             return '<h1>Ошибка загрузки страницы</h1>';
