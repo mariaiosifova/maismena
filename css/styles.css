@@ -22,17 +22,22 @@ body {
     background-color: #161616;
     padding: 8px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
+    height: 60px; /* Фиксированная высота шапки */
 }
 
 .header__container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100%; /* Занимает всю высоту шапки */
 }
 
 .header__logo {
     margin-right: 10px;
     margin-left: 2px;
+    height: 44px; /* Фиксированная высота логотипа */
+    width: auto; /* Сохраняет пропорции */
+    object-fit: contain; /* Сохраняет пропорции изображения */
 }
 
 .header__title {
@@ -41,11 +46,19 @@ body {
     letter-spacing: -2px;
     color: #dfdede;
     flex-grow: 1;
+    line-height: 1; /* Убирает лишнюю высоту от line-height */
+}
+
+/* ДОБАВЬ ЭТО В КОНЕЦ ФАЙЛА */
+.header__logo img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ===== КОМПОНЕНТ: ГЛАВНЫЙ ЭКРАН ===== */
 .hero {
-    padding: 20px 10px;
+    padding: 20px 0px;
 }
 
 .hero__container {
