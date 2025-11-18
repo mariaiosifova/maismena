@@ -8,7 +8,7 @@
 }
 
 :root {
-    --container-padding: 3%; /* Уменьшил с 5% до 3% */
+    --container-padding: 3%;
 }
 
 body {
@@ -116,6 +116,19 @@ body {
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    /* Убираем выделение при нажатии */
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 .button--primary {
@@ -142,7 +155,7 @@ body {
     color: #ffffff;
 }
 
-/* Кнопка Войти - МЕНЬШЕ по размеру */
+/* Кнопка Войти - МЕНЬШЕ по размеру и адаптивная */
 .button--header-login {
     background-color: rgb(220, 223, 227);
     border-radius: 10px;
@@ -150,6 +163,9 @@ body {
     font-size: 16px;
     color: #000000;
     white-space: nowrap;
+    /* Делаем кнопку меньше на всех устройствах */
+    font-size: clamp(14px, 3vw, 16px);
+    padding: clamp(5px, 2vw, 6px) clamp(12px, 3vw, 15px);
 }
 
 .button--header-login:hover {
@@ -188,7 +204,6 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     position: relative;
 }
-
 .modal-content h2 {
     text-align: center;
     margin-bottom: 25px;
@@ -222,6 +237,7 @@ body {
     font-weight: 550;
     color: #000000;
 }
+
 .form-group input {
     width: 100%;
     padding: 12px;
@@ -252,14 +268,14 @@ body {
 /* Большие компьютеры - еще меньше отступы */
 @media (min-width: 1200px) {
     :root {
-        --container-padding: 2%; /* Еще меньше на больших экранах */
+        --container-padding: 2%;
     }
 }
 
 /* Очень большие экраны */
 @media (min-width: 1920px) {
     :root {
-        --container-padding: 10%; /* Больше отступы на очень широких экранах */
+        --container-padding: 10%;
     }
 }
 
@@ -278,6 +294,13 @@ body {
         align-self: stretch;
         text-align: center;
     }
+    
+    /* На планшетах делаем основные кнопки меньше */
+    .button--primary,
+    .button--secondary {
+        font-size: 20px;
+        padding: 10px 20px;
+    }
 }
 
 /* Телефоны */
@@ -295,10 +318,17 @@ body {
         padding: 15px var(--container-padding);
     }
     
+    /* На телефонах основные кнопки еще меньше */
     .button--primary,
     .button--secondary {
-        font-size: 20px;
-        padding: 10px 20px;
+        font-size: 18px;
+        padding: 10px 18px;
+    }
+    
+    /* Кнопка "Войти" остается маленькой */
+    .button--header-login {
+        font-size: 14px;
+        padding: 5px 12px;
     }
     
     .modal-content {
@@ -329,5 +359,16 @@ body {
     
     .hero__description {
         font-size: 1rem;
+    }
+    
+    .button--primary,
+    .button--secondary {
+        font-size: 16px;
+        padding: 8px 16px;
+    }
+    
+    .button--header-login {
+        font-size: 13px;
+        padding: 4px 10px;
     }
 }
