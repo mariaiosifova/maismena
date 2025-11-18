@@ -81,7 +81,7 @@ body {
 }
 
 /* ===== КОМПОНЕНТ: КНОПКИ ===== */
-.home-page .button {
+.button {
     font-family: "Montserrat", sans-serif;
     font-weight: 550;
     border: none;
