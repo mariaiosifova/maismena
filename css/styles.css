@@ -1,3 +1,4 @@
+
 /* ===== БАЗОВЫЕ СТИЛИ ===== */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -5,6 +6,11 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+
+:root {
+    --container-padding: 5%;
+    --mobile-padding: 4%;
 }
 
 body {
@@ -20,24 +26,24 @@ body {
 /* ===== КОМПОНЕНТ: ШАПКА ===== */
 .header {
     background-color: #161616;
-    padding: 8px;
+    padding: 8px var(--container-padding);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
-    height: 60px; /* Фиксированная высота шапки */
+    height: 60px;
 }
 
 .header__container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 100%; /* Занимает всю высоту шапки */
+    height: 100%;
 }
 
 .header__logo {
     margin-right: 10px;
     margin-left: 2px;
-    height: 44px; /* Фиксированная высота логотипа */
-    width: auto; /* Сохраняет пропорции */
-    object-fit: contain; /* Сохраняет пропорции изображения */
+    height: 44px;
+    width: auto;
+    object-fit: contain;
 }
 
 .header__title {
@@ -46,10 +52,10 @@ body {
     letter-spacing: -2px;
     color: #dfdede;
     flex-grow: 1;
-    line-height: 1; /* Убирает лишнюю высоту от line-height */
+    line-height: 1;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
 }
 
-/* ДОБАВЬ ЭТО В КОНЕЦ ФАЙЛА */
 .header__logo img {
     height: 44px;
     width: auto;
@@ -58,41 +64,48 @@ body {
 
 /* ===== КОМПОНЕНТ: ГЛАВНЫЙ ЭКРАН ===== */
 .hero {
-    padding: 20px 0px;
+    padding: 20px var(--container-padding);
 }
 
 .hero__container {
     display: flex;
     flex-direction: column;
-    padding-left: 2%;
+    align-items: flex-start; /* Вернул выравнивание влево */
 }
 
 .hero__title {
-    font-size: 65px;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     font-weight: 650;
     letter-spacing: -2px;
     color: #000000;
     margin-bottom: 10px;
+    line-height: 1.1;
+    text-align: left; /* Вернул выравнивание влево */
 }
 
 .hero__description {
-    font-size: 25px;
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
     font-weight: 500;
     color: #000000;
     margin-bottom: 20px;
+    line-height: 1.3;
+    text-align: left; /* Вернул выравнивание влево */
 }
 
 .hero__actions {
     display: flex;
     gap: 10px;
     margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Кнопки выравниваются влево */
 }
 
 .hero__subtitle {
-    font-size: 25px;
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
     font-weight: 500;
     color: #000000;
     padding-top: 10%;
+    text-align: left; /* Вернул выравнивание влево */
 }
 
 /* ===== КОМПОНЕНТ: КНОПКИ ===== */
@@ -111,8 +124,8 @@ body {
 .button--primary {
     background-color: rgb(32, 153, 252);
     color: #000000;
-    padding: 12px;
-    font-size: 25px;
+    padding: clamp(10px, 3vw, 12px) clamp(15px, 4vw, 25px);
+    font-size: clamp(1rem, 4vw, 1.6rem);
 }
 
 .button--primary:hover {
@@ -123,8 +136,8 @@ body {
 .button--secondary {
     background-color: rgb(208, 210, 211);
     color: #000000;
-    padding: 12px 25px;
-    font-size: 25px;
+    padding: clamp(10px, 3vw, 12px) clamp(15px, 4vw, 25px);
+    font-size: clamp(1rem, 4vw, 1.6rem);
 }
 
 .button--secondary:hover {
@@ -135,9 +148,10 @@ body {
 .button--header-login {
     background-color: rgb(220, 223, 227);
     border-radius: 10px;
-    padding: 8px 18px;
-    font-size: 18px;
+    padding: clamp(6px, 2vw, 8px) clamp(12px, 3vw, 18px);
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
     color: #000000;
+    white-space: nowrap;
 }
 
 .button--header-login:hover {
@@ -146,12 +160,12 @@ body {
 }
 
 .button--large {
-    align-self: flex-start;
+    align-self: flex-start; /* Кнопки остаются слева */
 }
 
 /* ===== КОМПОНЕНТ: КАРУСЕЛЬ ===== */
 .carousel-section {
-    padding: 20px 0;
+    padding: 20px var(--container-padding);
 }
 
 /* Стили для модального окна */
@@ -169,9 +183,9 @@ body {
 .modal-content {
     background-color: white;
     margin: 10% auto;
-    padding: 30px;
+    padding: clamp(20px, 5vw, 30px);
     border-radius: 15px;
-    width: 400px;
+    width: min(400px, 90vw);
     max-width: 90%;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     position: relative;
@@ -180,7 +194,7 @@ body {
 .modal-content h2 {
     text-align: center;
     margin-bottom: 25px;
-    font-size: 28px;
+    font-size: clamp(1.5rem, 6vw, 1.8rem);
     font-weight: 650;
     color: #000000;
 }
@@ -188,12 +202,12 @@ body {
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: clamp(1.5rem, 6vw, 1.8rem);
     font-weight: bold;
     cursor: pointer;
     position: absolute;
-    right: 20px;
-    top: 15px;
+    right: clamp(15px, 4vw, 20px);
+    top: clamp(10px, 3vw, 15px);
 }
 
 .close:hover {
@@ -209,16 +223,17 @@ body {
     margin-bottom: 8px;
     font-weight: 550;
     color: #000000;
+    font-size: clamp(0.9rem, 3vw, 1rem);
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px;
+    padding: clamp(10px, 3vw, 12px);
     border: 2px solid #ddd;
     border-radius: 8px;
     box-sizing: border-box;
     font-family: "Montserrat", sans-serif;
-    font-size: 16px;
+    font-size: clamp(0.9rem, 3vw, 1rem);
     transition: border-color 0.3s ease;
 }
 
@@ -229,27 +244,174 @@ body {
 
 #registration-form .button {
     width: 100%;
-    padding: 15px;
-    font-size: 18px;
+    padding: clamp(12px, 4vw, 15px);
+    font-size: clamp(1rem, 4vw, 1.1rem);
     font-weight: 600;
     border-radius: 10px;
     margin-top: 10px;
 }
 
-/* Адаптивность для модального окна */
-@media (max-width: 480px) {
-    .modal-content {
-        width: 95%;
-        padding: 20px;
-        margin: 20% auto;
-    }
-    
-    .modal-content h2 {
-        font-size: 24px;
-    }
-    
-    #registration-form .button {
-        padding: 12px;
-        font-size: 16px;
+/* ===== АДАПТИВНЫЕ СТИЛИ ДЛЯ РАЗНЫХ УСТРОЙСТВ ===== */
+
+/* Планшеты и маленькие ноутбуки */
+@media (max-width: 1024px) {
+    :root {
+        --container-padding: 4%;
     }
 }
+
+/* Планшеты (вертикальная ориентация) и большие телефоны */
+@media (max-width: 768px) {
+    :root {
+        --container-padding: 3%;
+    }
+    
+    .hero__actions {
+        flex-direction: column;
+        align-items: flex-start; /* Сохраняем выравнивание влево */
+    }
+    
+    .button--large {
+        align-self: stretch; /* На маленьких экранах кнопки на всю ширину */
+        text-align: center;
+    }
+    
+    .header__title {
+        letter-spacing: -1px;
+    }
+}
+
+/* Телефоны */
+@media (max-width: 480px) {
+    :root {
+        --container-padding: 4%;
+    }
+    
+    .header {
+        padding: 8px var(--mobile-padding);
+        height: auto;
+        min-height: 60px;
+    }
+    
+    .header__container {
+        flex-wrap: wrap;
+    }
+    
+    .header__title {
+        order: 3;
+        flex-basis: 100%;
+        text-align: left; /* Вернул выравнивание влево */
+        margin-top: 5px;
+        font-size: 1.3rem;
+        margin-left: 50px; /* Компенсируем сдвиг из-за логотипа */
+    }
+    
+    .hero {
+        padding: 15px var(--mobile-padding);
+    }
+    
+    .hero__title {
+        letter-spacing: -1px;
+        text-align: left; /* Вернул выравнивание влево */
+    }
+    
+    .hero__description {
+        text-align: left; /* Вернул выравнивание влево */
+    }
+    
+    .hero__actions {
+        justify-content: flex-start; /* Кнопки остаются слева */
+        align-items: flex-start;
+    }
+    
+    .button--large {
+        align-self: stretch; /* На телефонах кнопки на всю ширину */
+        text-align: center;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .carousel-section {
+        padding: 15px var(--mobile-padding);
+    }
+}
+
+/* Очень маленькие телефоны */
+@media (max-width: 320px) {
+    :root {
+        --container-padding: 3%;
+    }
+    
+    .hero__title {
+        font-size: 2rem;
+    }
+    
+    .hero__description {
+        font-size: 1rem;
+    }
+    
+    .button--primary,
+    .button--secondary {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+    
+    .header__title {
+        margin-left: 40px; /* Меньший отступ для очень маленьких экранов */
+    }
+}
+
+/* Большие экраны */
+@media (min-width: 1440px) {
+    :root {
+        --container-padding: 10%;
+    }
+}
+
+/* Очень большие экраны */
+@media (min-width: 1920px) {
+    :root {
+        --container-padding: 15%;
+    }
+}
+
+/* Поддержка landscape ориентации на мобильных устройствах */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 10px var(--container-padding);
+    }
+    
+    .modal-content {
+        margin: 5% auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Улучшение читаемости для пользователей с уменьшенным движением */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* УДАЛИТЕ ЭТОТ БЛОК ЧТОБЫ ИЗБЕЖАТЬ ЧЕРНОГО ФОНА */
+/*
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .hero__title,
+    .hero__description,
+    .hero__subtitle {
+        color: #ffffff;
+    }
+}
+*/
