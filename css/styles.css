@@ -64,7 +64,7 @@ body {
 .hero__container {
     display: flex;
     flex-direction: column;
-    padding: 2%;
+    padding-left: 2%;
 }
 
 .hero__title {
@@ -92,6 +92,7 @@ body {
     font-size: 25px;
     font-weight: 500;
     color: #000000;
+    padding-top: 10%;
 }
 
 /* ===== КОМПОНЕНТ: КНОПКИ ===== */
