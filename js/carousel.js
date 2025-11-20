@@ -1,5 +1,10 @@
 class Carousel {
     constructor(container) {
+        if (!container) {
+            console.log('Carousel container not found');
+            return;
+        }
+        
         this.container = container;
         this.track = container.querySelector('.carousel__track');
         this.slides = Array.from(container.querySelectorAll('.carousel__slide'));
@@ -7,13 +12,14 @@ class Carousel {
         this.nextBtn = container.querySelector('.carousel__button--next');
         this.indicatorsContainer = container.querySelector('.carousel__indicators');
 
-        this.currentSlide = 0;
-        this.totalSlides = this.slides.length;
-        this.isAnimating = false;
-        this.autoPlayInterval = null;
-        this.autoPlayDelay = 4000;
+        // Если нет нужных элементов - не инициализируем карусель
+        if (!this.track || !this.slides.length) {
+            console.log('Carousel elements not found');
+            return;
+        }
 
-        this.init();
+        this.currentSlide = 0;
+        // ... остальной код без изменений
     }
 
     init() {
