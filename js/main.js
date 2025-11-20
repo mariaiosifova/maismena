@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Обработка формы регистрации
-    registrationForm.addEventListener('submit', async (event) => {
+    registrationForm.addEventListener('submit', (event) => {
         event.preventDefault();
         
         const username = document.getElementById('username').value.trim();
@@ -47,44 +47,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        try {
-            // Показываем загрузку
-            const submitBtn = registrationForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Регистрация...';
-            submitBtn.disabled = true;
-
-            // Здесь будет вызов функции сохранения
-            await saveUserToGist(username, password);
-            
-            // Успех
-            alert('Регистрация прошла успешно!');
-            modal.style.display = 'none';
-            window.location.href = 'success.html';
-
-        } catch (error) {
-            console.error('Ошибка регистрации:', error);
-            alert('Ошибка регистрации: ' + error.message);
-            
-            // Восстанавливаем кнопку
-            const submitBtn = registrationForm.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Зарегистрироваться';
-            submitBtn.disabled = false;
-        }
+        // Сохраняем пользователя в localStorage
+        saveUserToLocalStorage(username, password);
+        
+        // Успех
+        alert('Регистрация прошла успешно!');
+        modal.style.display = 'none';
+        window.location.href = 'success.html';
     });
 });
 
-// Функции для работы с GitHub Gist
-const GIST_ID = 'ТВОЙ_GIST_ID'; // ЗАМЕНИ на настоящий ID
-
-async function getGitHubToken() {
-    const token = prompt('Для регистрации введите GitHub Personal Access Token:\n(Получить можно тут: https://github.com/settings/tokens)');
-    if (token && token.trim()) {
-        return token.trim();
-    }
-    throw new Error('Токен не предоставлен');
-}
-
+// Функция для хэширования пароля
 function simpleHash(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -95,65 +68,44 @@ function simpleHash(str) {
     return Math.abs(hash).toString(36);
 }
 
-async function saveUserToGist(username, password) {
-    const GITHUB_TOKEN = await getGitHubToken();
-
-    // 1. Получаем текущий gist
-    const getResponse = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Accept': 'application/vnd.github.v3+json'
-        }
-    });
-
-    if (!getResponse.ok) {
-        throw new Error('Не удалось получить данные gist');
-    }
-
-    const gist = await getResponse.json();
-    const usersFile = gist.files['users.json'];
-
-    // 2. Парсим текущих пользователей
-    const currentContent = usersFile.content || '[]';
-    const users = JSON.parse(currentContent);
-
-    // 3. Проверяем, не занят ли логин
-    const userExists = users.find(user => user.username === username);
+// Сохранение пользователя в localStorage
+function saveUserToLocalStorage(username, password) {
+    // Получаем текущих пользователей
+    const existingUsers = JSON.parse(localStorage.getItem('maiUsers') || '[]');
+    
+    // Проверяем, не занят ли логин
+    const userExists = existingUsers.find(user => user.username === username);
     if (userExists) {
-        throw new Error('Пользователь с таким логином уже существует');
+        alert('Пользователь с таким логином уже существует');
+        return false;
     }
 
-    // 4. Добавляем нового пользователя
+    // Создаем нового пользователя
     const newUser = {
         id: Date.now().toString(),
         username: username,
-        password: simpleHash(password),
+        password: simpleHash(password), // Сохраняем хэш пароля
         registrationDate: new Date().toISOString()
     };
 
-    users.push(newUser);
+    // Добавляем в массив пользователей
+    existingUsers.push(newUser);
+    
+    // Сохраняем обратно в localStorage
+    localStorage.setItem('maiUsers', JSON.stringify(existingUsers));
+    
+    console.log('Пользователь сохранен в localStorage:', username);
+    return true;
+}
 
-    // 5. Обновляем gist
-    const updateResponse = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-        method: 'PATCH',
-        headers: {
-            'Authorization': `token ${GITHUB_TOKEN}`,
-            'Content-Type': 'application/json',
-            'Accept': 'application/vnd.github.v3+json'
-        },
-        body: JSON.stringify({
-            description: `База пользователей МАИ Смена - ${users.length} пользователей`,
-            files: {
-                'users.json': {
-                    content: JSON.stringify(users, null, 2)
-                }
-            }
-        })
-    });
+// Функция для проверки входа (может пригодиться позже)
+function loginUser(username, password) {
+    const users = JSON.parse(localStorage.getItem('maiUsers') || '[]');
+    const passwordHash = simpleHash(password);
+    return users.find(user => user.username === username && user.password === passwordHash);
+}
 
-    if (!updateResponse.ok) {
-        throw new Error('Ошибка сохранения данных в GitHub');
-    }
-
-    console.log('Пользователь успешно сохранен');
+// Функция для получения всех пользователей (для админа)
+function getAllUsers() {
+    return JSON.parse(localStorage.getItem('maiUsers') || '[]');
 }
