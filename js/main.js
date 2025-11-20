@@ -58,9 +58,10 @@ registrationForm.addEventListener('submit', async (event) => {
         submitBtn.textContent = 'Регистрация...';
         submitBtn.disabled = true;
 
-        // Отправляем запрос
+        // Отправляем запрос с режимом CORS
         const response = await fetch('https://maismena.ru/php/register.php', {
             method: 'POST',
+            mode: 'cors', // Явно указываем CORS режим
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -71,12 +72,15 @@ registrationForm.addEventListener('submit', async (event) => {
         });
 
         console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.log('Error response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
         console.log('Response data:', result);
-
-        if (!response.ok) {
-            throw new Error(result.error || 'Ошибка сервера');
-        }
 
         // Успех
         alert('Регистрация прошла успешно!');
