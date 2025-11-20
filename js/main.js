@@ -59,17 +59,17 @@ registrationForm.addEventListener('submit', async (event) => {
         submitBtn.disabled = true;
 
         // Отправляем запрос с режимом CORS
-        const response = await fetch('https://maismena.ru/php/register.php', {
-            method: 'POST',
-            mode: 'cors', // Явно указываем CORS режим
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password
-            })
-        });
+        // Просто относительный путь - браузер сам подставит правильный домен
+const response = await fetch('/php/register.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        username: username,
+        password: password
+    })
+});
 
         console.log('Response status:', response.status);
         
