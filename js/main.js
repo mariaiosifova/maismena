@@ -210,16 +210,3 @@ function showLoginModal() {
         }
     });
 }
-
-// Карусель и другие функции...
-class Carousel {
-    // ... существующий код карусели без изменений ...
-}
-
-// Инициализация карусели
-document.addEventListener('DOMContentLoaded', () => {
-    const carouselContainer = document.querySelector('.carousel');
-    if (carouselContainer) {
-        new Carousel(carouselContainer);
-    }
-});
