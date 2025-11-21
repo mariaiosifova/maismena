@@ -8,16 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-          <!-- Навигационная панель -->
+         <!-- Навигационная панель -->
     <nav class="navbar">
         <div class="navbar__container">
             <div class="navbar__logo">
                 <img src="images/mai_logo.png" alt="МАИ Смена" width="32" height="32">
                 <span class="navbar__title">МАИ Смена</span>
             </div>
-            
-            <!-- Добавляем кнопку гамбургера -->
-            <button class="navbar__toggle" id="navbarToggle">☰</button>
             
             <div class="navbar__menu" id="navbarMenu">
                 <a href="#events" class="navbar__link navbar__link--active">Лента мероприятий</a>
@@ -26,13 +23,17 @@
                 <a href="#profile" class="navbar__link">Личный кабинет</a>
             </div>
             
-            <div class="navbar__coins">
-                <span class="coins__icon">🪙</span>
-                <span class="coins__amount">150 MAIcoins</span>
+            <div class="navbar__right">
+                <div class="navbar__coins">
+                    <span class="coins__icon">🪙</span>
+                    <span class="coins__amount">150 MAIcoins</span>
+                </div>
+                
+                <!-- Кнопка гамбургера теперь справа от MAIcoins -->
+                <button class="navbar__toggle" id="navbarToggle">☰</button>
             </div>
         </div>
     </nav>
-
     <!-- Основной контент -->
     <main class="dashboard">
         <!-- Лента мероприятий (активная по умолчанию) -->

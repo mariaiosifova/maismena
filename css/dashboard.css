@@ -61,6 +61,14 @@
     color: #000000;
 }
 
+/* Правая часть навбара */
+.navbar__right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1001;
+}
+
 .navbar__coins {
     display: flex;
     align-items: center;
@@ -71,7 +79,6 @@
     color: #dfdede;
     font-weight: 600;
     font-size: 0.9rem;
-    z-index: 1001;
 }
 
 .coins__icon {
@@ -87,7 +94,6 @@
     font-size: 1.5rem;
     cursor: pointer;
     padding: 5px;
-    z-index: 1001;
 }
 
 /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
@@ -126,6 +132,10 @@
     .navbar__link {
         padding: 5px 10px;
         font-size: 0.85rem;
+    }
+    
+    .navbar__right {
+        gap: 10px;
     }
     
     .dashboard {
@@ -179,8 +189,6 @@
     .navbar__coins {
         font-size: 0.8rem;
         padding: 5px 10px;
-        margin-left: auto;
-        margin-right: 10px;
     }
     
     .navbar__toggle {
@@ -217,6 +225,10 @@
         padding: 4px 8px;
     }
     
+    .navbar__right {
+        gap: 8px;
+    }
+    
     .dashboard {
         padding: 50px var(--container-padding) 15px;
     }
@@ -225,6 +237,8 @@
         font-size: 1.8rem;
     }
 }
+
+/* Остальные стили (лента мероприятий, вакансии, лидерборд, профиль) остаются без изменений */
 
 /* Горизонтальные телефоны */
 @media (max-height: 500px) and (orientation: landscape) {
