@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет - МАИ Смена</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <div class="navbar__logo">
+                <img src="images/mai_logo.png" alt="МАИ Смена" width="40" height="40">
+                <span class="navbar__title">МАИ Смена</span>
+            </div>
+            
+            <div class="navbar__menu">
+                <a href="#events" class="navbar__link navbar__link--active">Лента мероприятий</a>
+                <a href="#topc" class="navbar__link">ТОПс Вакансии</a>
+                <a href="#leaderboard" class="navbar__link">Лидерборд</a>
+                <a href="#profile" class="navbar__link">Личный кабинет</a>
+            </div>
+            
+            <div class="navbar__coins">
+                <span class="coins__icon">🪙</span>
+                <span class="coins__amount">150 MAIcoins</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="dashboard">
+        <!-- Лента мероприятий (активная по умолчанию) -->
+        <section id="events" class="page active">
+            <div class="page__header">
+                <h1>Лента мероприятий</h1>
+            </div>
+            <div class="events-grid">
+                <!-- Карточка мероприятия 1 -->
+                <div class="event-card">
+                    <div class="event-card__image">
+                        <img src="images/event1.jpg" alt="Мероприятие 1">
+                        <div class="event-card__title-mobile">Название мероприятия 1</div>
+                    </div>
+                    <div class="event-card__content">
+                        <h3 class="event-card__title">Название мероприятия 1</h3>
+                        <p class="event-card__description">Краткое описание мероприятия. Здесь будет находиться информация о мероприятии, его целях и основных моментах.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка мероприятия 2 -->
+                <div class="event-card">
+                    <div class="event-card__image">
+                        <img src="images/event2.jpg" alt="Мероприятие 2">
+                        <div class="event-card__title-mobile">Название мероприятия 2</div>
+                    </div>
+                    <div class="event-card__content">
+                        <h3 class="event-card__title">Название мероприятия 2</h3>
+                        <p class="event-card__description">Краткое описание мероприятия. Здесь будет находиться информация о мероприятии, его целях и основных моментах.</p>
+                    </div>
+                </div>
+
+                <!-- Добавь остальные мероприятия -->
+            </div>
+        </section>
+
+        <!-- ТОПс Вакансии -->
+        <section id="topc" class="page">
+            <div class="page__header">
+                <h1>Вакансии ТОПс</h1>
+            </div>
+            <div class="vacancies-list">
+                <!-- Вакансия 1 -->
+                <div class="vacancy-card">
+                    <div class="vacancy-card__main">
+                        <h3 class="vacancy-card__title">Название вакансии</h3>
+                        <p class="vacancy-card__description">Описание работы и обязанностей. Подробное описание того, что нужно делать на этой вакансии.</p>
+                    </div>
+                    <div class="vacancy-card__meta">
+                        <div class="vacancy-card__time">⏰ 4 часа</div>
+                        <div class="vacancy-card__payment">💵 50 MAIcoins</div>
+                    </div>
+                </div>
+                <!-- Добавь остальные вакансии -->
+            </div>
+        </section>
+
+        <!-- Лидерборд -->
+        <section id="leaderboard" class="page">
+            <div class="page__header">
+                <h1>Лидерборд активистов</h1>
+            </div>
+            <div class="leaderboard">
+                <!-- 1 место -->
+                <div class="leaderboard__item leaderboard__item--first">
+                    <span class="leaderboard__rank">1</span>
+                    <span class="leaderboard__username">user_leader</span>
+                    <span class="leaderboard__coins">1250 MAIcoins</span>
+                </div>
+                <!-- 2 место -->
+                <div class="leaderboard__item leaderboard__item--second">
+                    <span class="leaderboard__rank">2</span>
+                    <span class="leaderboard__username">user_pro</span>
+                    <span class="leaderboard__coins">980 MAIcoins</span>
+                </div>
+                <!-- 3 место -->
+                <div class="leaderboard__item leaderboard__item--third">
+                    <span class="leaderboard__rank">3</span>
+                    <span class="leaderboard__username">user_active</span>
+                    <span class="leaderboard__coins">750 MAIcoins</span>
+                </div>
+                <!-- Остальные места -->
+                <div class="leaderboard__item">
+                    <span class="leaderboard__rank">4</span>
+                    <span class="leaderboard__username">user123</span>
+                    <span class="leaderboard__coins">600 MAIcoins</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Личный кабинет -->
+        <section id="profile" class="page">
+            <div class="page__header">
+                <h1>Личный кабинет</h1>
+            </div>
+            <div class="profile">
+                <div class="profile__photo">
+                    <img src="images/user_avatar.jpg" alt="Фото пользователя">
+                </div>
+                <div class="profile__info">
+                    <div class="profile__field">
+                        <label>Фамилия:</label>
+                        <span class="profile__value">Иванов</span>
+                    </div>
+                    <div class="profile__field">
+                        <label>Имя:</label>
+                        <span class="profile__value">Иван</span>
+                    </div>
+                    <div class="profile__field">
+                        <label>Отчество:</label>
+                        <span class="profile__value">Иванович</span>
+                    </div>
+                    <div class="profile__field">
+                        <label>Группа:</label>
+                        <span class="profile__value">М1О-101Б-23</span>
+                    </div>
+                    <div class="profile__field">
+                        <label>Направление:</label>
+                        <span class="profile__value">Программная инженерия</span>
+                    </div>
+                    <div class="profile__field">
+                        <label>Факультет:</label>
+                        <span class="profile__value">ФКЦИН</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

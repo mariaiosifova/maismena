@@ -196,9 +196,10 @@ function showLoginModal() {
             }
 
             // Успешный вход
-            alert('Вход выполнен успешно!');
-            loginModal.remove();
-            window.location.href = '/hello.html';
+alert('Вход выполнен успешно!');
+loginModal.remove();
+window.location.href = '/dashboard.html';;
+            
 
         } catch (error) {
             console.error('Ошибка входа:', error);
