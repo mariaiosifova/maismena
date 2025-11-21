@@ -8,7 +8,7 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    transition: transform 0.3s ease, padding 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .navbar--hidden {
@@ -21,6 +21,7 @@
     align-items: center;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
 }
 
 .navbar__logo {
@@ -30,6 +31,7 @@
     color: #dfdede;
     font-weight: 650;
     font-size: 1rem;
+    z-index: 1001;
 }
 
 .navbar__logo img {
@@ -69,6 +71,7 @@
     color: #dfdede;
     font-weight: 600;
     font-size: 0.9rem;
+    z-index: 1001;
 }
 
 .coins__icon {
@@ -84,6 +87,7 @@
     font-size: 1.5rem;
     cursor: pointer;
     padding: 5px;
+    z-index: 1001;
 }
 
 /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
@@ -91,7 +95,6 @@
     padding: 80px var(--container-padding) 30px;
     max-width: 1200px;
     margin: 0 auto;
-    transition: padding 0.3s ease;
 }
 
 .page {
@@ -138,7 +141,6 @@
     
     .navbar__container {
         flex-wrap: wrap;
-        gap: 10px;
     }
     
     .navbar__logo {
@@ -151,31 +153,34 @@
     }
     
     .navbar__menu {
-        order: 3;
-        width: 100%;
-        justify-content: space-between;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #161616;
+        flex-direction: column;
+        padding: 10px var(--container-padding);
+        gap: 5px;
         display: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
     
     .navbar__menu--open {
         display: flex;
-        flex-direction: column;
-        gap: 5px;
-        background: #161616;
-        padding: 10px;
-        border-radius: 10px;
-        margin-top: 10px;
     }
     
     .navbar__link {
-        padding: 8px 12px;
+        padding: 10px 15px;
         text-align: center;
         font-size: 0.9rem;
+        border-radius: 8px;
     }
     
     .navbar__coins {
         font-size: 0.8rem;
         padding: 5px 10px;
+        margin-left: auto;
+        margin-right: 10px;
     }
     
     .navbar__toggle {

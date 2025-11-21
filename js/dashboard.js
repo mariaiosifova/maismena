@@ -1,17 +1,28 @@
 // Навигация между страницами и управление навбаром
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     const navbar = document.querySelector('.navbar');
     const navLinks = document.querySelectorAll('.navbar__link');
     const pages = document.querySelectorAll('.page');
-    const menuToggle = document.querySelector('.navbar__toggle');
-    const navbarMenu = document.querySelector('.navbar__menu');
+    const menuToggle = document.getElementById('navbarToggle');
+    const navbarMenu = document.getElementById('navbarMenu');
     
     let lastScrollY = window.scrollY;
     let isMenuOpen = false;
 
+    // Функции для мобильного меню
+    function openMobileMenu() {
+        navbarMenu.classList.add('navbar__menu--open');
+        isMenuOpen = true;
+    }
+    
+    function closeMobileMenu() {
+        navbarMenu.classList.remove('navbar__menu--open');
+        isMenuOpen = false;
+    }
+    
     // Обработка кликов по навигации
     navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
+        link.addEventListener('click', function(e) {
             e.preventDefault();
             
             // Убираем активный класс у всех ссылок и страниц
@@ -19,10 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
             pages.forEach(page => page.classList.remove('active'));
             
             // Добавляем активный класс к текущей ссылке
-            link.classList.add('navbar__link--active');
+            this.classList.add('navbar__link--active');
             
             // Показываем соответствующую страницу
-            const targetId = link.getAttribute('href').substring(1);
+            const targetId = this.getAttribute('href').substring(1);
             const targetPage = document.getElementById(targetId);
             if (targetPage) {
                 targetPage.classList.add('active');
@@ -37,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Управление мобильным меню
     if (menuToggle && navbarMenu) {
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', function() {
             if (isMenuOpen) {
                 closeMobileMenu();
             } else {
@@ -46,18 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    function openMobileMenu() {
-        navbarMenu.classList.add('navbar__menu--open');
-        isMenuOpen = true;
-    }
-    
-    function closeMobileMenu() {
-        navbarMenu.classList.remove('navbar__menu--open');
-        isMenuOpen = false;
-    }
-    
     // Обработка скролла для скрытия/показа навбара
-    window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', function() {
         const currentScrollY = window.scrollY;
         
         if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -72,12 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     // Закрытие мобильного меню при клике вне его
-    document.addEventListener('click', (e) => {
-        if (isMenuOpen && !navbar.contains(e.target)) {
+    document.addEventListener('click', function(e) {
+        if (isMenuOpen && !e.target.closest('.navbar')) {
             closeMobileMenu();
         }
     });
     
     // По умолчанию показываем ленту мероприятий
-    document.querySelector('.navbar__link--active').click();
+    const activeLink = document.querySelector('.navbar__link--active');
+    if (activeLink) {
+        activeLink.click();
+    }
 });
