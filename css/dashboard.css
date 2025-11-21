@@ -150,11 +150,13 @@
     }
     
     .navbar__container {
-        flex-wrap: wrap;
+        flex-wrap: nowrap; /* ← ВАЖНО: запрещаем перенос */
+        gap: 15px;
     }
     
     .navbar__logo {
         font-size: 0.9rem;
+        flex-shrink: 0; /* ← Запрещаем сжатие лого */
     }
     
     .navbar__logo img {
@@ -186,13 +188,21 @@
         border-radius: 8px;
     }
     
+    .navbar__right {
+        flex-shrink: 0; /* ← Запрещаем сжатие правой части */
+        gap: 10px;
+        margin-left: auto; /* ← Прижимаем к правому краю */
+    }
+    
     .navbar__coins {
         font-size: 0.8rem;
         padding: 5px 10px;
+        white-space: nowrap; /* ← Запрещаем перенос текста */
     }
     
     .navbar__toggle {
         display: block;
+        flex-shrink: 0; /* ← Запрещаем сжатие гамбургера */
     }
     
     .dashboard {
@@ -208,6 +218,10 @@
 @media (max-width: 480px) {
     .navbar {
         padding: 4px var(--container-padding);
+    }
+    
+    .navbar__container {
+        gap: 10px;
     }
     
     .navbar__logo {
@@ -237,6 +251,19 @@
         font-size: 1.8rem;
     }
 }
+
+/* Очень маленькие телефоны */
+@media (max-width: 360px) {
+    .navbar__logo span {
+        display: none; /* ← Скрываем текст "МАИ Смена" на очень маленьких экранах */
+    }
+    
+    .navbar__coins span:last-child {
+        display: none; /* ← Скрываем текст "MAIcoins", оставляем только иконку и число */
+    }
+}
+
+/* Остальные стили (лента мероприятий, вакансии, лидерборд, профиль) остаются без изменений */
 
 /* Остальные стили (лента мероприятий, вакансии, лидерборд, профиль) остаются без изменений */
 
