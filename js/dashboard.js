@@ -79,34 +79,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // По умолчанию показываем ленту мероприятий
-    const activeLink = document.querySelector('.navbar__link--active');
-    if (activeLink) {
-        activeLink.click();
-    }
-});
-    // Автоматическое открытие профиля если в URL есть хэш
-    function checkUrlHash() {
+    // Автоматическое открытие нужной страницы по хэшу
+    function activatePageFromHash() {
         const hash = window.location.hash;
         if (hash) {
-            const targetPage = document.querySelector(hash);
-            if (targetPage) {
-                // Убираем активный класс у всех ссылок и страниц
+            const targetId = hash.substring(1); // Убираем #
+            const targetLink = document.querySelector(`[href="#${targetId}"]`);
+            const targetPage = document.getElementById(targetId);
+            
+            if (targetLink && targetPage) {
+                // Убираем активные классы
                 navLinks.forEach(l => l.classList.remove('navbar__link--active'));
                 pages.forEach(page => page.classList.remove('active'));
                 
-                // Находим соответствующую ссылку и активируем её
-                const correspondingLink = document.querySelector(`[href="${hash}"]`);
-                if (correspondingLink) {
-                    correspondingLink.classList.add('navbar__link--active');
-                    targetPage.classList.add('active');
-                }
+                // Активируем нужную страницу
+                targetLink.classList.add('navbar__link--active');
+                targetPage.classList.add('active');
             }
         }
     }
     
-    // Проверяем хэш при загрузке
-    checkUrlHash();
+    // По умолчанию показываем ленту мероприятий, если нет хэша
+    if (!window.location.hash) {
+        const activeLink = document.querySelector('.navbar__link--active');
+        if (activeLink) {
+            activeLink.click();
+        }
+    } else {
+        // Если есть хэш - активируем соответствующую страницу
+        activatePageFromHash();
+    }
     
-    // Слушаем изменения хэша (на случай если меняется вручную)
-    window.addEventListener('hashchange', checkUrlHash);
+    // Слушаем изменения хэша
+    window.addEventListener('hashchange', activatePageFromHash);
+});
