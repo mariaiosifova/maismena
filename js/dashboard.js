@@ -85,3 +85,28 @@ document.addEventListener('DOMContentLoaded', function() {
         activeLink.click();
     }
 });
+    // Автоматическое открытие профиля если в URL есть хэш
+    function checkUrlHash() {
+        const hash = window.location.hash;
+        if (hash) {
+            const targetPage = document.querySelector(hash);
+            if (targetPage) {
+                // Убираем активный класс у всех ссылок и страниц
+                navLinks.forEach(l => l.classList.remove('navbar__link--active'));
+                pages.forEach(page => page.classList.remove('active'));
+                
+                // Находим соответствующую ссылку и активируем её
+                const correspondingLink = document.querySelector(`[href="${hash}"]`);
+                if (correspondingLink) {
+                    correspondingLink.classList.add('navbar__link--active');
+                    targetPage.classList.add('active');
+                }
+            }
+        }
+    }
+    
+    // Проверяем хэш при загрузке
+    checkUrlHash();
+    
+    // Слушаем изменения хэша (на случай если меняется вручную)
+    window.addEventListener('hashchange', checkUrlHash);

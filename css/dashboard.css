@@ -661,3 +661,13 @@
         gap: 15px;
     }
 }
+/* Стиль для режима редактирования (опционально) */
+.profile__value {
+    transition: all 0.3s ease;
+}
+
+.profile__value:focus {
+    border-color: rgb(32, 153, 252);
+    background-color: #f8f9fa;
+    outline: none;
+}

@@ -30,70 +30,69 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Обработка формы регистрации
-        registrationForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            console.log('Form submitted');
+            // Обработка формы регистрации
+    registrationForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        console.log('Form submitted');
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+
+        console.log('Form data:', { username, password });
+
+        // Валидация
+        if (username.length < 3) {
+            alert('Логин должен быть не менее 3 символов');
+            return;
+        }
+        if (password.length < 6) {
+            alert('Пароль должен быть не менее 6 символов');
+            return;
+        }
+
+        try {
+            // Показываем загрузку
+            const submitBtn = registrationForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Регистрация...';
+            submitBtn.disabled = true;
+
+            console.log('Sending registration request...');
+
+            // Отправляем запрос регистрации
+            const response = await fetch('/php/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            console.log('Response status:', response.status);
+            const result = await response.json();
+            console.log('Response data:', result);
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Ошибка сервера');
+            }
+
+            // УСПЕШНАЯ РЕГИСТРАЦИЯ - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
+            modal.style.display = 'none';
+            window.location.href = '/dashboard.html#profile'; // ← Редирект сразу в личный кабинет
+
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            alert('Ошибка регистрации: ' + error.message);
             
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
-
-            console.log('Form data:', { username, password });
-
-            // Валидация
-            if (username.length < 3) {
-                alert('Логин должен быть не менее 3 символов');
-                return;
-            }
-            if (password.length < 6) {
-                alert('Пароль должен быть не менее 6 символов');
-                return;
-            }
-
-            try {
-                // Показываем загрузку
-                const submitBtn = registrationForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Регистрация...';
-                submitBtn.disabled = true;
-
-                console.log('Sending registration request...');
-
-                // Отправляем запрос регистрации
-                const response = await fetch('/php/register.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
-                });
-
-                console.log('Response status:', response.status);
-                const result = await response.json();
-                console.log('Response data:', result);
-
-                if (!response.ok) {
-                    throw new Error(result.error || 'Ошибка сервера');
-                }
-
-                // Успех
-                alert('Регистрация прошла успешно!');
-                modal.style.display = 'none';
-                window.location.href = 'success.html';
-
-            } catch (error) {
-                console.error('Ошибка регистрации:', error);
-                alert('Ошибка регистрации: ' + error.message);
-                
-                // Восстанавливаем кнопку
-                const submitBtn = registrationForm.querySelector('button[type="submit"]');
-                submitBtn.textContent = 'Зарегистрироваться';
-                submitBtn.disabled = false;
-            }
-        });
+            // Восстанавливаем кнопку
+            const submitBtn = registrationForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Зарегистрироваться';
+            submitBtn.disabled = false;
+        }
+    });
     }
 
     // Обработка кнопки "Войти" в шапке
