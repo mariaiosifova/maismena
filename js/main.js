@@ -81,7 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // УСПЕШНАЯ РЕГИСТРАЦИЯ - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
             modal.style.display = 'none';
-            window.location.href = '/dashboard.html#profile'; // ← Редирект сразу в личный кабинет
+            // Успех - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
+            console.log('Регистрация успешна, делаю редирект...');
+            console.log('Response OK:', response.ok);
+            console.log('Result:', result);
+
+            modal.style.display = 'none';
+            window.location.href = 'dashboard.html#profile'; // ← Редирект сразу в личный кабинет
 
         } catch (error) {
             console.error('Ошибка регистрации:', error);
