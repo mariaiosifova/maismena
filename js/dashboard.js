@@ -1,5 +1,6 @@
 // Навигация между страницами и управление навбаром
 document.addEventListener('DOMContentLoaded', function() {
+    // Получаем элементы
     const navbar = document.querySelector('.navbar');
     const navLinks = document.querySelectorAll('.navbar__link');
     const pages = document.querySelectorAll('.page');
@@ -9,82 +10,82 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollY = window.scrollY;
     let isMenuOpen = false;
 
-    // Функции для мобильного меню
-    function openMobileMenu() {
-        navbarMenu.classList.add('navbar__menu--open');
-        isMenuOpen = true;
+    // Функция активации страницы по ID
+    function activatePage(pageId) {
+        console.log('Активируем страницу:', pageId);
+        
+        // Убираем активные классы у всех
+        navLinks.forEach(link => link.classList.remove('navbar__link--active'));
+        pages.forEach(page => page.classList.remove('active'));
+        
+        // Активируем нужную страницу
+        const targetLink = document.querySelector(`[href="#${pageId}"]`);
+        const targetPage = document.getElementById(pageId);
+        
+        if (targetLink && targetPage) {
+            targetLink.classList.add('navbar__link--active');
+            targetPage.classList.add('active');
+            return true;
+        }
+        return false;
     }
-    
-    function closeMobileMenu() {
-        navbarMenu.classList.remove('navbar__menu--open');
-        isMenuOpen = false;
-    }
-    
-    // Автоматическое открытие нужной страницы по хэшу
+
+    // Функция активации по хэшу
     function activatePageFromHash() {
         const hash = window.location.hash;
-        console.log('Активация по хэшу:', hash);
+        console.log('Проверяем хэш:', hash);
         
         if (hash) {
-            const targetId = hash.substring(1); // Убираем #
-            const targetLink = document.querySelector(`[href="#${targetId}"]`);
-            const targetPage = document.getElementById(targetId);
-            
-            if (targetLink && targetPage) {
-                console.log('Найдена целевая страница:', targetId);
-                // Убираем активные классы
-                navLinks.forEach(l => l.classList.remove('navbar__link--active'));
-                pages.forEach(page => page.classList.remove('active'));
-                
-                // Активируем нужную страницу
-                targetLink.classList.add('navbar__link--active');
-                targetPage.classList.add('active');
-                return true; // Успешно активировали по хэшу
-            }
+            const pageId = hash.substring(1); // Убираем #
+            return activatePage(pageId);
         }
-        return false; // Хэш не активирован
+        return false;
     }
-    
+
     // СНАЧАЛА пробуем активировать по хэшу
     const hashActivated = activatePageFromHash();
     
-    // ЕСЛИ хэш не активирован - тогда активируем по умолчанию
+    // ЕСЛИ хэш не активирован - тогда активируем первую страницу
     if (!hashActivated) {
-        console.log('Хэш не найден, активируем по умолчанию');
-        const activeLink = document.querySelector('.navbar__link--active');
-        if (activeLink) {
-            activeLink.click();
+        console.log('Хэш не найден, активируем первую страницу');
+        if (navLinks.length > 0) {
+            const firstPageId = navLinks[0].getAttribute('href').substring(1);
+            activatePage(firstPageId);
         }
     }
-    
+
     // Обработка кликов по навигации
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Убираем активный класс у всех ссылок и страниц
-            navLinks.forEach(l => l.classList.remove('navbar__link--active'));
-            pages.forEach(page => page.classList.remove('active'));
+            const pageId = this.getAttribute('href').substring(1);
+            activatePage(pageId);
             
-            // Добавляем активный класс к текущей ссылке
-            this.classList.add('navbar__link--active');
+            // Обновляем URL
+            window.location.hash = pageId;
             
-            // Показываем соответствующую страницу
-            const targetId = this.getAttribute('href').substring(1);
-            const targetPage = document.getElementById(targetId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            }
-            
-            // Обновляем URL с хэшем
-            window.location.hash = targetId;
-            
-            // Закрываем мобильное меню если открыто
+            // Закрываем мобильное меню
             if (isMenuOpen) {
                 closeMobileMenu();
             }
         });
     });
+    
+    // Функции мобильного меню
+    function openMobileMenu() {
+        if (navbarMenu) {
+            navbarMenu.classList.add('navbar__menu--open');
+            isMenuOpen = true;
+        }
+    }
+    
+    function closeMobileMenu() {
+        if (navbarMenu) {
+            navbarMenu.classList.remove('navbar__menu--open');
+            isMenuOpen = false;
+        }
+    }
     
     // Управление мобильным меню
     if (menuToggle && navbarMenu) {
@@ -102,10 +103,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentScrollY = window.scrollY;
         
         if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            // Скролл вниз - скрываем навбар
             navbar.classList.add('navbar--hidden');
         } else {
-            // Скролл вверх - показываем навбар
             navbar.classList.remove('navbar--hidden');
         }
         
@@ -114,11 +113,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Закрытие мобильного меню при клике вне его
     document.addEventListener('click', function(e) {
-        if (isMenuOpen && !e.target.closest('.navbar')) {
+        if (isMenuOpen && navbar && !navbar.contains(e.target)) {
             closeMobileMenu();
         }
     });
     
-    // Слушаем изменения хэша (на случай ручного изменения в URL)
+    // Слушаем изменения хэша
     window.addEventListener('hashchange', activatePageFromHash);
+    
+    console.log('Dashboard загружен!');
 });
