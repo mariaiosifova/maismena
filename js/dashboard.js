@@ -20,6 +20,43 @@ document.addEventListener('DOMContentLoaded', function() {
         isMenuOpen = false;
     }
     
+    // Автоматическое открытие нужной страницы по хэшу
+    function activatePageFromHash() {
+        const hash = window.location.hash;
+        console.log('Активация по хэшу:', hash);
+        
+        if (hash) {
+            const targetId = hash.substring(1); // Убираем #
+            const targetLink = document.querySelector(`[href="#${targetId}"]`);
+            const targetPage = document.getElementById(targetId);
+            
+            if (targetLink && targetPage) {
+                console.log('Найдена целевая страница:', targetId);
+                // Убираем активные классы
+                navLinks.forEach(l => l.classList.remove('navbar__link--active'));
+                pages.forEach(page => page.classList.remove('active'));
+                
+                // Активируем нужную страницу
+                targetLink.classList.add('navbar__link--active');
+                targetPage.classList.add('active');
+                return true; // Успешно активировали по хэшу
+            }
+        }
+        return false; // Хэш не активирован
+    }
+    
+    // СНАЧАЛА пробуем активировать по хэшу
+    const hashActivated = activatePageFromHash();
+    
+    // ЕСЛИ хэш не активирован - тогда активируем по умолчанию
+    if (!hashActivated) {
+        console.log('Хэш не найден, активируем по умолчанию');
+        const activeLink = document.querySelector('.navbar__link--active');
+        if (activeLink) {
+            activeLink.click();
+        }
+    }
+    
     // Обработка кликов по навигации
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -38,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (targetPage) {
                 targetPage.classList.add('active');
             }
+            
+            // Обновляем URL с хэшем
+            window.location.hash = targetId;
             
             // Закрываем мобильное меню если открыто
             if (isMenuOpen) {
@@ -79,37 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Автоматическое открытие нужной страницы по хэшу
-    function activatePageFromHash() {
-        const hash = window.location.hash;
-        if (hash) {
-            const targetId = hash.substring(1); // Убираем #
-            const targetLink = document.querySelector(`[href="#${targetId}"]`);
-            const targetPage = document.getElementById(targetId);
-            
-            if (targetLink && targetPage) {
-                // Убираем активные классы
-                navLinks.forEach(l => l.classList.remove('navbar__link--active'));
-                pages.forEach(page => page.classList.remove('active'));
-                
-                // Активируем нужную страницу
-                targetLink.classList.add('navbar__link--active');
-                targetPage.classList.add('active');
-            }
-        }
-    }
-    
-    // По умолчанию показываем ленту мероприятий, если нет хэша
-    if (!window.location.hash) {
-        const activeLink = document.querySelector('.navbar__link--active');
-        if (activeLink) {
-            activeLink.click();
-        }
-    } else {
-        // Если есть хэш - активируем соответствующую страницу
-        activatePageFromHash();
-    }
-    
-    // Слушаем изменения хэша
+    // Слушаем изменения хэша (на случай ручного изменения в URL)
     window.addEventListener('hashchange', activatePageFromHash);
 });
