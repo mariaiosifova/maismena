@@ -671,3 +671,88 @@
     background-color: #f8f9fa;
     outline: none;
 }
+/* ===== РЕЖИМ РЕДАКТИРОВАНИЯ ПРОФИЛЯ ===== */
+.profile__input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid rgb(32, 153, 252);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.profile__input:focus {
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(32, 153, 252, 0.1);
+}
+
+.profile__actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.profile__edit {
+    background: rgb(32, 153, 252);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.profile__edit:hover {
+    background: rgb(0, 0, 0);
+}
+
+.profile__save {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.profile__save:hover {
+    background: #218838;
+}
+
+.profile__cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.profile__cancel:hover {
+    background: #5a6268;
+}
+
+/* Адаптив для кнопок */
+@media (max-width: 768px) {
+    .profile__actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .profile__edit,
+    .profile__save,
+    .profile__cancel {
+        width: 100%;
+        max-width: 300px;
+    }
+}
