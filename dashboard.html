@@ -123,44 +123,55 @@
                 </div>
             </div>
         </section>
-
-        <!-- Личный кабинет -->
-        <section id="profile" class="page">
-            <div class="page__header">
-                <h1>Личный кабинет</h1>
+<!-- Личный кабинет -->
+<section id="profile" class="page">
+    <div class="page__header">
+        <h1>Личный кабинет</h1>
+    </div>
+    <div class="profile">
+        <div class="profile__photo">
+            <img src="images/user_avatar.jpg" alt="Фото пользователя" id="profile-photo">
+            <button class="profile__photo-upload" onclick="changePhoto()">Изменить фото</button>
+        </div>
+        <div class="profile__info">
+            <div class="profile__field">
+                <label for="profile-lastname">Фамилия:</label>
+                <span class="profile__value" id="profile-lastname-view">Иванов</span>
+                <input type="text" class="profile__input" id="profile-lastname-edit" value="Иванов" style="display: none;">
             </div>
-            <div class="profile">
-                <div class="profile__photo">
-                    <img src="images/user_avatar.jpeg" alt="Фото пользователя">
-                </div>
-                <div class="profile__info">
-                    <div class="profile__field">
-                        <label>Фамилия:</label>
-                        <span class="profile__value">Иванов</span>
-                    </div>
-                    <div class="profile__field">
-                        <label>Имя:</label>
-                        <span class="profile__value">Иван</span>
-                    </div>
-                    <div class="profile__field">
-                        <label>Отчество:</label>
-                        <span class="profile__value">Иванович</span>
-                    </div>
-                    <div class="profile__field">
-                        <label>Группа:</label>
-                        <span class="profile__value">М1О-101Б-23</span>
-                    </div>
-                    <div class="profile__field">
-                        <label>Направление:</label>
-                        <span class="profile__value">Программная инженерия</span>
-                    </div>
-                    <div class="profile__field">
-                        <label>Факультет:</label>
-                        <span class="profile__value">ФКЦИН</span>
-                    </div>
-                </div>
+            <div class="profile__field">
+                <label for="profile-firstname">Имя:</label>
+                <span class="profile__value" id="profile-firstname-view">Иван</span>
+                <input type="text" class="profile__input" id="profile-firstname-edit" value="Иван" style="display: none;">
             </div>
-        </section>
+            <div class="profile__field">
+                <label for="profile-middlename">Отчество:</label>
+                <span class="profile__value" id="profile-middlename-view">Иванович</span>
+                <input type="text" class="profile__input" id="profile-middlename-edit" value="Иванович" style="display: none;">
+            </div>
+            <div class="profile__field">
+                <label for="profile-group">Группа:</label>
+                <span class="profile__value" id="profile-group-view">М1О-101Б-23</span>
+                <input type="text" class="profile__input" id="profile-group-edit" value="М1О-101Б-23" style="display: none;">
+            </div>
+            <div class="profile__field">
+                <label for="profile-direction">Направление:</label>
+                <span class="profile__value" id="profile-direction-view">Программная инженерия</span>
+                <input type="text" class="profile__input" id="profile-direction-edit" value="Программная инженерия" style="display: none;">
+            </div>
+            <div class="profile__field">
+                <label for="profile-faculty">Факультет:</label>
+                <span class="profile__value" id="profile-faculty-view">ФКЦИН</span>
+                <input type="text" class="profile__input" id="profile-faculty-edit" value="ФКЦИН" style="display: none;">
+            </div>
+        </div>
+    </div>
+    <div class="profile__actions">
+        <button class="profile__edit" id="edit-profile-btn" onclick="toggleEditMode()">Редактировать профиль</button>
+        <button class="profile__save" id="save-profile-btn" onclick="saveProfile()" style="display: none;">Сохранить изменения</button>
+        <button class="profile__cancel" id="cancel-edit-btn" onclick="cancelEdit()" style="display: none;">Отмена</button>
+    </div>
+</section>
     </main>
 
     <script src="js/dashboard.js"></script>
