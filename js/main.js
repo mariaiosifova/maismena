@@ -203,7 +203,7 @@ function showLoginModal() {
             // Успешный вход
 alert('Вход выполнен успешно!');
 loginModal.remove();
-window.location.href = '/dashboard.html';;
+window.location.href = '/dashboard.html#profile?firstLogin=true';
             
 
         } catch (error) {
