@@ -117,6 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 showLoginModal();
             });
         }
+
+        const regTgBtn = document.querySelectorAll('.button--tgreg');
+    mainLoginBtns.forEach(btn => {
+        if (btn.textContent.includes('TG-регистрация')) {
+            btn.addEventListener('click', () => {
+                showTgReg();
+            });
+        }
     });
 });
 
@@ -216,3 +224,106 @@ window.location.href = '/dashboard.html#profile?firstLogin=true';
         }
     });
 }
+
+function showTgReg() {
+    // Создаем модальное окно входа
+    const tg = window.Telegram.WebApp;
+    tg.expand;
+    const user = tg.initDataUnsafe?.user;
+    
+    const loginModal = document.createElement('div');
+    loginModal.className = 'modal';
+    loginModal.style.display = 'block';
+    loginModal.innerHTML = `
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход в систему</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Логин:</label>
+                    <input type="text" id="login-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Пароль:</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit" class="button button--primary">Войти</button>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(loginModal);
+    document.getElementById('login-username').value = user.username
+    document.getElementById('login-password').value;
+
+    // Закрытие модального окна
+    const closeBtn = loginModal.querySelector('.close');
+    closeBtn.addEventListener('click', () => {
+        loginModal.remove();
+    });
+
+    // Закрытие при клике вне окна
+    loginModal.addEventListener('click', (event) => {
+        if (event.target === loginModal) {
+            loginModal.remove();
+        }
+    });
+
+    // Обработка формы входа
+    const loginForm = loginModal.querySelector('#login-form');
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        // Валидация
+        if (username.length < 3) {
+            alert('Логин должен быть не менее 3 символов');
+            return;
+        }
+        if (password.length < 6) {
+            alert('Пароль должен быть не менее 6 символов');
+            return;
+        }
+
+        try {
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Вход...';
+            submitBtn.disabled = true;
+
+            const response = await fetch('/php/login.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.error || 'Ошибка входа');
+            }
+
+            // Успешный вход
+alert('Вход выполнен успешно!');
+loginModal.remove();
+window.location.href = '/dashboard.html#profile?firstLogin=true';
+            
+
+        } catch (error) {
+            console.error('Ошибка входа:', error);
+            alert('Ошибка входа: ' + error.message);
+            
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Войти';
+            submitBtn.disabled = false;
+        }
+    });
+}
+
