@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Редирект с таймаутом для визуального подтверждения
                 setTimeout(() => {
-                    window.location.href = 'dashboard.html#profile?firstLogin=true&autoEdit=true';
+                   window.location.href = 'dashboard.html?firstLogin=true&autoEdit=true#profile';
                 }, 1000);
 
             } catch (error) {
@@ -219,7 +219,7 @@ function showLoginModal() {
             loginModal.remove();
             
             setTimeout(() => {
-                window.location.href = 'dashboard.html#profile?firstLogin=true';
+                window.location.href = 'dashboard.html?firstLogin=true#profile';
             }, 1000);
 
         } catch (error) {
@@ -329,7 +329,7 @@ function showTgReg() {
             tgModal.remove();
             
             setTimeout(() => {
-                window.location.href = 'dashboard.html#profile?firstLogin=true&autoEdit=true';
+                window.location.href = 'dashboard.html?firstLogin=true&autoEdit=true#profile';
             }, 1000);
 
         } catch (error) {
