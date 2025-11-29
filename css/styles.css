@@ -322,7 +322,8 @@ body {
     }
     
     .button--primary,
-    .button--secondary {
+    .button--secondary,
+    .button--tgreg {
         font-size: 26px;
         padding: 14px 28px;
     }
@@ -357,13 +358,15 @@ body {
     }
     
     .button--primary,
-    .button--secondary {
+    .button--secondary,
+    .button--tgreg {
         font-size: 24px;
         padding: 12px 25px;
     }
     
     /* Кнопка "Войти" на основной странице - меняем длину под текст */
-    .button--secondary {
+    .button--secondary,
+    .button--tgreg {
         width: auto; /* Ширина по содержимому */
         min-width: 120px; /* Минимальная ширина */
         padding: 12px 20px; /* Подбираем под текст */
@@ -412,13 +415,15 @@ body {
     }
     
     .button--primary,
-    .button--secondary {
+    .button--secondary,
+    .button--tgreg {
         font-size: 22px;
         padding: 10px 22px;
     }
     
     /* Кнопка "Войти" на основной странице на очень маленьких телефонах */
-    .button--secondary {
+    .button--secondary,
+    .button--tgreg {
         min-width: 110px;
         padding: 10px 18px;
     }
