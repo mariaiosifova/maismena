@@ -136,6 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Функция показа модального окна входа
 function showLoginModal() {
+    // Получаем данные пользователя Telegram, если доступны
+    const tgUser = window.tg?.initDataUnsafe?.user;
+    const tgUsername = tgUser?.username;
+    
     // Создаем модальное окно входа
     const loginModal = document.createElement('div');
     loginModal.className = 'modal';
@@ -144,10 +148,14 @@ function showLoginModal() {
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Вход в систему</h2>
+            ${tgUsername ? `<p class="tg-info">Вы вошли в Telegram как: <strong>@${tgUsername}</strong></p>` : ''}
             <form id="login-form">
                 <div class="form-group">
                     <label for="login-username">Логин:</label>
-                    <input type="text" id="login-username" name="username" required>
+                    <input type="text" id="login-username" name="username" 
+                           value="${tgUsername ? tgUsername : ''}" 
+                           ${tgUsername ? 'readonly' : ''} 
+                           required>
                 </div>
                 <div class="form-group">
                     <label for="login-password">Пароль:</label>
@@ -155,6 +163,11 @@ function showLoginModal() {
                 </div>
                 <button type="submit" class="button button--primary">Войти</button>
             </form>
+            ${tgUsername ? `
+            <div class="tg-login-note">
+                <small>Логин автоматически заполнен из вашего Telegram аккаунта</small>
+            </div>
+            ` : ''}
         </div>
     `;
 
