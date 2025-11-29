@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(result.error || 'Ошибка сервера');
                 }
 
-                // УСПЕШНАЯ РЕГИСТРАЦИЯ
+                // УСПЕШНАЯ РЕГИСТРАЦИЯ - с autoEdit
                 console.log('Регистрация успешна, делаю редирект...');
                 modal.style.display = 'none';
                 
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Редирект с таймаутом для визуального подтверждения
                 setTimeout(() => {
-                   window.location.href = 'dashboard.html?firstLogin=true&autoEdit=true#profile';
+                    window.location.href = 'dashboard.html?firstLogin=true&autoEdit=true#profile';
                 }, 1000);
 
             } catch (error) {
@@ -214,12 +214,12 @@ function showLoginModal() {
                 throw new Error(result.error || 'Ошибка входа');
             }
 
-            // Успешный вход
+            // Успешный вход - БЕЗ autoEdit
             alert('Вход выполнен успешно! Перенаправляем в личный кабинет...');
             loginModal.remove();
             
             setTimeout(() => {
-                window.location.href = 'dashboard.html?firstLogin=true#profile';
+                window.location.href = 'dashboard.html#profile';
             }, 1000);
 
         } catch (error) {
@@ -324,7 +324,7 @@ function showTgReg() {
                 throw new Error(result.error || 'Ошибка регистрации');
             }
 
-            // Успешная регистрация
+            // Успешная регистрация - с autoEdit
             alert('Регистрация через Telegram выполнена успешно! Перенаправляем в личный кабинет...');
             tgModal.remove();
             
