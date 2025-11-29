@@ -84,7 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // УСПЕШНАЯ РЕГИСТРАЦИЯ - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
                 console.log('Регистрация успешна, делаю редирект...');
                 modal.style.display = 'none';
-                window.location.href = 'dashboard.html#profile';
+                // После успешной регистрации
+                window.location.href = '/dashboard.html#profile?firstLogin=true&autoEdit=true';
 
             } catch (error) {
                 console.error('Ошибка регистрации:', error);
@@ -317,7 +318,8 @@ function showTgReg() {
             // Успешная регистрация
             alert('Регистрация через Telegram выполнена успешно!');
             tgModal.remove();
-            window.location.href = '/dashboard.html#profile';
+            // После успешной регистрации
+            window.location.href = '/dashboard.html#profile?firstLogin=true&autoEdit=true';
 
         } catch (error) {
             console.error('Ошибка регистрации:', error);
