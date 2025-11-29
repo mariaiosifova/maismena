@@ -747,11 +747,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-   // Функции мобильного меню
+// Функции мобильного меню
 function openMobileMenu() {
     if (navbarMenu) {
         navbarMenu.classList.add('navbar__menu--open');
         menuToggle.classList.add('navbar__toggle--active');
+        
+        // Добавляем оверлей
+        const overlay = document.getElementById('navbarOverlay');
+        if (overlay) {
+            overlay.classList.add('navbar__overlay--active');
+        }
+        
+        // Блокируем прокрутку body
+        document.body.style.overflow = 'hidden';
         isMenuOpen = true;
     }
 }
@@ -760,6 +769,15 @@ function closeMobileMenu() {
     if (navbarMenu) {
         navbarMenu.classList.remove('navbar__menu--open');
         menuToggle.classList.remove('navbar__toggle--active');
+        
+        // Убираем оверлей
+        const overlay = document.getElementById('navbarOverlay');
+        if (overlay) {
+            overlay.classList.remove('navbar__overlay--active');
+        }
+        
+        // Разблокируем прокрутку body
+        document.body.style.overflow = '';
         isMenuOpen = false;
     }
 }
@@ -777,12 +795,11 @@ if (menuToggle && navbarMenu) {
     });
 }
 
-// Закрытие мобильного меню при клике вне его
-document.addEventListener('click', function(e) {
-    if (isMenuOpen && navbar && !navbar.contains(e.target)) {
-        closeMobileMenu();
-    }
-});
+// Закрытие мобильного меню при клике на оверлей
+const overlay = document.getElementById('navbarOverlay');
+if (overlay) {
+    overlay.addEventListener('click', closeMobileMenu);
+}
 
 // Закрытие мобильного меню при клике на ссылку внутри меню
 navLinks.forEach(link => {
@@ -791,6 +808,13 @@ navLinks.forEach(link => {
             closeMobileMenu();
         }
     });
+});
+
+// Закрытие мобильного меню при нажатии ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isMenuOpen) {
+        closeMobileMenu();
+    }
 });
     
     // Инициализируем приложение
