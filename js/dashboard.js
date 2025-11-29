@@ -747,73 +747,86 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-// Функции мобильного меню
-function openMobileMenu() {
-    if (navbarMenu) {
-        navbarMenu.classList.add('navbar__menu--open');
-        menuToggle.classList.add('navbar__toggle--active');
-        
-        // Добавляем оверлей
-        const overlay = document.getElementById('navbarOverlay');
-        if (overlay) {
-            overlay.classList.add('navbar__overlay--active');
+// ===== ПРОСТОЙ КОД ДЛЯ МОБИЛЬНОГО МЕНЮ =====
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM загружен, ищем элементы меню...');
+    
+    // Получаем элементы
+    const menuToggle = document.getElementById('navbarToggle');
+    const navbarMenu = document.getElementById('navbarMenu');
+    
+    console.log('Кнопка меню:', menuToggle);
+    console.log('Меню:', navbarMenu);
+    
+    let isMenuOpen = false;
+
+    // Функции мобильного меню
+    function openMobileMenu() {
+        console.log('Открываем меню');
+        if (navbarMenu) {
+            navbarMenu.classList.add('navbar__menu--open');
+            menuToggle.classList.add('navbar__toggle--active');
+            isMenuOpen = true;
+            document.body.style.overflow = 'hidden';
         }
-        
-        // Блокируем прокрутку body
-        document.body.style.overflow = 'hidden';
-        isMenuOpen = true;
     }
-}
 
-function closeMobileMenu() {
-    if (navbarMenu) {
-        navbarMenu.classList.remove('navbar__menu--open');
-        menuToggle.classList.remove('navbar__toggle--active');
-        
-        // Убираем оверлей
-        const overlay = document.getElementById('navbarOverlay');
-        if (overlay) {
-            overlay.classList.remove('navbar__overlay--active');
+    function closeMobileMenu() {
+        console.log('Закрываем меню');
+        if (navbarMenu) {
+            navbarMenu.classList.remove('navbar__menu--open');
+            menuToggle.classList.remove('navbar__toggle--active');
+            isMenuOpen = false;
+            document.body.style.overflow = '';
         }
-        
-        // Разблокируем прокрутку body
-        document.body.style.overflow = '';
-        isMenuOpen = false;
     }
-}
 
-// Управление мобильного меню
-if (menuToggle && navbarMenu) {
-    menuToggle.addEventListener('click', function(e) {
-        e.stopPropagation(); // Предотвращаем всплытие
+    // Управление мобильного меню
+    if (menuToggle && navbarMenu) {
+        console.log('Элементы найдены, добавляем обработчики');
         
-        if (isMenuOpen) {
-            closeMobileMenu();
-        } else {
-            openMobileMenu();
-        }
-    });
-}
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            console.log('Клик по кнопке меню, текущее состояние:', isMenuOpen);
+            
+            if (isMenuOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        });
 
-// Закрытие мобильного меню при клике на оверлей
-const overlay = document.getElementById('navbarOverlay');
-if (overlay) {
-    overlay.addEventListener('click', closeMobileMenu);
-}
+        // Закрытие меню при клике на ссылку
+        const navLinks = document.querySelectorAll('.navbar__link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                console.log('Клик по ссылке меню');
+                if (isMenuOpen) {
+                    closeMobileMenu();
+                }
+            });
+        });
 
-// Закрытие мобильного меню при клике на ссылку внутри меню
-navLinks.forEach(link => {
-    link.addEventListener('click', function() {
-        if (isMenuOpen) {
-            closeMobileMenu();
-        }
-    });
-});
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (isMenuOpen && !navbarMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                console.log('Клик вне меню');
+                closeMobileMenu();
+            }
+        });
 
-// Закрытие мобильного меню при нажатии ESC
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && isMenuOpen) {
-        closeMobileMenu();
+        // Закрытие меню при нажатии ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isMenuOpen) {
+                console.log('Нажата ESC');
+                closeMobileMenu();
+            }
+        });
+
+    } else {
+        console.error('❌ Не найдены элементы меню!');
+        console.error('navbarToggle:', menuToggle);
+        console.error('navbarMenu:', navbarMenu);
     }
 });
     
