@@ -25,9 +25,67 @@ document.addEventListener('DOMContentLoaded', function() {
         if (targetLink && targetPage) {
             targetLink.classList.add('navbar__link--active');
             targetPage.classList.add('active');
+            
+            // Если активируем профиль - проверяем нужно ли автоматическое редактирование
+            if (pageId === 'profile') {
+                checkAutoEditMode();
+            }
+            
             return true;
         }
         return false;
+    }
+
+    // Проверка автоматического режима редактирования
+    function checkAutoEditMode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const firstLogin = urlParams.get('firstLogin');
+        const autoEdit = urlParams.get('autoEdit');
+        
+        console.log('Проверка авто-редактирования:', { firstLogin, autoEdit });
+        
+        // Если это первая авторизация или явно указан autoEdit
+        if (firstLogin === 'true' || autoEdit === 'true') {
+            console.log('Автоматически включаем режим редактирования');
+            
+            // Даем небольшую задержку для полной загрузки DOM
+            setTimeout(() => {
+                if (typeof toggleEditMode === 'function') {
+                    toggleEditMode(true); // Принудительно включаем редактирование
+                    
+                    // Показываем сообщение для нового пользователя
+                    showWelcomeMessage();
+                }
+            }, 500);
+        }
+    }
+
+    // Показать приветственное сообщение для нового пользователя
+    function showWelcomeMessage() {
+        const welcomeMessage = document.createElement('div');
+        welcomeMessage.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 300px;
+        `;
+        welcomeMessage.innerHTML = `
+            <h4 style="margin: 0 0 8px 0;">Добро пожаловать! 🎉</h4>
+            <p style="margin: 0; font-size: 14px;">Заполните свой профиль для начала работы</p>
+        `;
+        
+        document.body.appendChild(welcomeMessage);
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            welcomeMessage.remove();
+        }, 5000);
     }
 
     // Функция активации по хэшу
@@ -120,6 +178,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Слушаем изменения хэша
     window.addEventListener('hashchange', activatePageFromHash);
+    
+    // Проверяем авто-редактирование при загрузке (на случай если сразу открыт профиль)
+    setTimeout(() => {
+        if (window.location.hash === '#profile') {
+            checkAutoEditMode();
+        }
+    }, 1000);
     
     console.log('Dashboard загружен!');
 });
