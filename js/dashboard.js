@@ -1,6 +1,6 @@
-// Навигация между страницами и управление навбаром
+// Упрощенный dashboard.js с интеграцией новых менеджеров
 document.addEventListener('DOMContentLoaded', function() {
-    // Получаем элементы
+    // Основные элементы
     const navbar = document.querySelector('.navbar');
     const navLinks = document.querySelectorAll('.navbar__link');
     const pages = document.querySelectorAll('.page');
@@ -9,323 +9,184 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let lastScrollY = window.scrollY;
     let isMenuOpen = false;
-    let currentUser = null;
 
     // Инициализация приложения
     async function initializeApp() {
+        console.log('🚀 Инициализация приложения...');
+        
         try {
-            // Проверяем авторизацию
-            await checkAuth();
+            // Инициализируем менеджеры
+            await initializeManagers();
             
-            // Загружаем данные
-            await loadEvents();
-            await loadVacancies();
+            // Настраиваем навигацию
+            setupNavigation();
             
-            // Обновляем интерфейс в зависимости от роли
-            await updateUIForRole();
+            // Загружаем начальные данные
+            await loadInitialData();
+            
+            console.log('✅ Приложение инициализировано');
             
         } catch (error) {
-            console.error('Ошибка инициализации:', error);
+            console.error('❌ Ошибка инициализации:', error);
         }
     }
 
-    // Проверка авторизации
-    async function checkAuth() {
-        try {
-            const response = await fetch('/php/check_current_user.php', {
-                method: 'GET',
-                credentials: 'include'
+    // Инициализация менеджеров
+    async function initializeManagers() {
+        // RoleManager уже создан глобально в role-manager.js
+        if (typeof roleManager !== 'undefined') {
+            await roleManager.checkUserRole();
+            console.log('✅ RoleManager инициализирован');
+        }
+        
+        // EventManager и VacancyManager уже созданы глобально в event-manager.js
+        if (typeof eventManager !== 'undefined') {
+            console.log('✅ EventManager доступен');
+        }
+        
+        if (typeof vacancyManager !== 'undefined') {
+            console.log('✅ VacancyManager доступен');
+        }
+        
+        // Инициализируем CreateFormsManager если он существует
+        if (typeof CreateFormsManager !== 'undefined') {
+            new CreateFormsManager();
+            console.log('✅ CreateFormsManager инициализирован');
+        }
+        
+        // Инициализируем CreateButtonsManager если он существует
+        if (typeof CreateButtonsManager !== 'undefined') {
+            new CreateButtonsManager();
+            console.log('✅ CreateButtonsManager инициализирован');
+        }
+    }
+
+    // Настройка навигации
+    function setupNavigation() {
+        console.log('🔧 Настраиваем навигацию...');
+        
+        // Активируем страницу по хэшу или первую страницу
+        const hashActivated = activatePageFromHash();
+        if (!hashActivated && navLinks.length > 0) {
+            const firstPageId = navLinks[0].getAttribute('href').substring(1);
+            activatePage(firstPageId);
+        }
+
+        // Обработчики навигации
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const pageId = this.getAttribute('href').substring(1);
+                activatePage(pageId);
+                window.location.hash = pageId;
+                
+                if (isMenuOpen) {
+                    closeMobileMenu();
+                }
             });
-            
-            const result = await response.json();
-            
-            if (result.server.user_id && result.server.user_id !== 'not_set') {
-                currentUser = {
-                    id: result.server.user_id,
-                    username: result.server.username
-                };
-                console.log('Пользователь авторизован:', currentUser);
-                return true;
-            } else {
-                console.log('Пользователь не авторизован');
-                return false;
-            }
-        } catch (error) {
-            console.error('Ошибка проверки авторизации:', error);
-            return false;
-        }
-    }
+        });
 
-    // Проверка роли пользователя
-    async function checkUserRole() {
-        try {
-            const response = await fetch('/php/check_role.php', {
-                method: 'GET',
-                credentials: 'include'
+        // Мобильное меню
+        if (menuToggle && navbarMenu) {
+            menuToggle.addEventListener('click', function() {
+                if (isMenuOpen) {
+                    closeMobileMenu();
+                } else {
+                    openMobileMenu();
+                }
             });
+        }
+
+        // Скрытие навбара при скролле
+        window.addEventListener('scroll', function() {
+            const currentScrollY = window.scrollY;
             
-            const result = await response.json();
-            
-            if (result.success) {
-                return result.role;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                navbar.classList.add('navbar--hidden');
             } else {
-                return 'user';
+                navbar.classList.remove('navbar--hidden');
             }
-        } catch (error) {
-            console.error('Ошибка проверки роли:', error);
-            return 'user';
-        }
-    }
-
-    // Обновление интерфейса в зависимости от роли
-    async function updateUIForRole() {
-        const role = await checkUserRole();
-        console.log('Роль пользователя:', role);
-        
-        // Если пользователь организатор или админ, показываем кнопки создания
-        if (role === 'organizer' || role === 'admin') {
-            showCreateButtons();
-        }
-        
-        // Обновляем отображение кнопок записи/отклика
-        updateActionButtons();
-    }
-
-    // Показать кнопки создания для организаторов
-    function showCreateButtons() {
-        // Добавляем кнопку создания мероприятия
-        const eventsHeader = document.querySelector('#events .page__header');
-        if (eventsHeader && !document.getElementById('create-event-btn')) {
-            const createEventBtn = document.createElement('button');
-            createEventBtn.id = 'create-event-btn';
-            createEventBtn.className = 'button button--primary';
-            createEventBtn.textContent = '+ Создать мероприятие';
-            createEventBtn.style.marginLeft = '20px';
-            createEventBtn.onclick = showCreateEventModal;
-            eventsHeader.appendChild(createEventBtn);
-        }
-        
-        // Добавляем кнопку создания вакансии
-        const vacanciesHeader = document.querySelector('#topc .page__header');
-        if (vacanciesHeader && !document.getElementById('create-vacancy-btn')) {
-            const createVacancyBtn = document.createElement('button');
-            createVacancyBtn.id = 'create-vacancy-btn';
-            createVacancyBtn.className = 'button button--primary';
-            createVacancyBtn.textContent = '+ Создать вакансию';
-            createVacancyBtn.style.marginLeft = '20px';
-            createVacancyBtn.onclick = showCreateVacancyModal;
-            vacanciesHeader.appendChild(createVacancyBtn);
-        }
-    }
-
-    // Загрузка мероприятий
-    async function loadEvents() {
-        try {
-            const response = await fetch('/php/get_events.php');
-            const result = await response.json();
             
-            if (result.success && result.events) {
-                renderEvents(result.events);
-            } else {
-                console.error('Ошибка загрузки мероприятий:', result.error);
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки мероприятий:', error);
-        }
-    }
+            lastScrollY = currentScrollY;
+        });
 
-    // Отрисовка мероприятий
-    function renderEvents(events) {
-        const eventsGrid = document.querySelector('.events-grid');
-        if (!eventsGrid) return;
-        
-        // Очищаем существующие карточки (кроме статических, если есть)
-        const existingCards = eventsGrid.querySelectorAll('.event-card');
-        existingCards.forEach(card => {
-            if (!card.classList.contains('static-event')) {
-                card.remove();
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(e) {
+            if (isMenuOpen && navbar && !navbar.contains(e.target)) {
+                closeMobileMenu();
             }
         });
-        
-        // Добавляем мероприятия из базы
-        events.forEach(event => {
-            const eventCard = createEventCard(event);
-            eventsGrid.appendChild(eventCard);
-        });
+
+        // Отслеживание изменений хэша
+        window.addEventListener('hashchange', activatePageFromHash);
     }
 
-    // Создание карточки мероприятия
-    function createEventCard(event) {
-        const card = document.createElement('div');
-        card.className = 'event-card';
-        card.dataset.eventId = event.id;
+    // Загрузка начальных данных
+    async function loadInitialData() {
+        console.log('📥 Загружаем начальные данные...');
         
-        card.innerHTML = `
-            <div class="event-card__image">
-                <img src="${event.image || 'images/event-default.jpg'}" alt="${event.title}">
-                <div class="event-card__title-mobile">${event.title}</div>
-            </div>
-            <div class="event-card__content">
-                <h3 class="event-card__title">${event.title}</h3>
-                <p class="event-card__description">${event.description}</p>
-                <div class="event-card__meta">
-                    ${event.date ? `<div class="event-card__date">📅 ${event.date}</div>` : ''}
-                    ${event.time_start ? `<div class="event-card__time">⏰ ${event.time_start}${event.time_end ? ` - ${event.time_end}` : ''}</div>` : ''}
-                    ${event.location ? `<div class="event-card__location">📍 ${event.location}</div>` : ''}
-                    <div class="event-card__points">🪙 +50 MAIPoints</div>
-                </div>
-                <button class="event-card__button button button--primary" onclick="registerForEvent('${event.id}')">
-                    Записаться
-                </button>
-            </div>
-        `;
+        // Загружаем мероприятия и вакансии при активации соответствующих страниц
+        const currentPage = getCurrentPage();
         
-        return card;
+        if (currentPage === 'events' || currentPage === 'topc') {
+            await loadEventsAndVacancies();
+        }
+        
+        // Проверяем авто-редактирование профиля
+        checkAutoEditMode();
     }
 
-    // Загрузка вакансий
-    async function loadVacancies() {
+    // Загрузка мероприятий и вакансий
+    async function loadEventsAndVacancies() {
         try {
-            const response = await fetch('/php/get_vacancies.php');
-            const result = await response.json();
-            
-            if (result.success && result.vacancies) {
-                renderVacancies(result.vacancies);
+            // Используем существующие методы из CreateFormsManager
+            const formsManager = getFormsManager();
+            if (formsManager) {
+                await formsManager.loadExistingData();
             } else {
-                console.error('Ошибка загрузки вакансий:', result.error);
+                // Альтернативная загрузка если CreateFormsManager не доступен
+                await loadEventsAndVacanciesFallback();
             }
         } catch (error) {
-            console.error('Ошибка загрузки вакансий:', error);
+            console.error('Ошибка загрузки данных:', error);
         }
     }
 
-    // Отрисовка вакансий
-    function renderVacancies(vacancies) {
-        const vacanciesList = document.querySelector('.vacancies-list');
-        if (!vacanciesList) return;
-        
-        // Очищаем существующие карточки (кроме статических, если есть)
-        const existingCards = vacanciesList.querySelectorAll('.vacancy-card');
-        existingCards.forEach(card => {
-            if (!card.classList.contains('static-vacancy')) {
-                card.remove();
-            }
-        });
-        
-        // Добавляем вакансии из базы
-        vacancies.forEach(vacancy => {
-            const vacancyCard = createVacancyCard(vacancy);
-            vacanciesList.appendChild(vacancyCard);
-        });
-    }
-
-    // Создание карточки вакансии
-    function createVacancyCard(vacancy) {
-        const card = document.createElement('div');
-        card.className = 'vacancy-card';
-        card.dataset.vacancyId = vacancy.id;
-        
-        const hours = Math.floor(vacancy.payment / 12.5); // Пример расчета часов
-        
-        card.innerHTML = `
-            <div class="vacancy-card__main">
-                <h3 class="vacancy-card__title">${vacancy.title}</h3>
-                <p class="vacancy-card__description">${vacancy.description}</p>
-                ${vacancy.requirements ? `<p class="vacancy-card__requirements"><strong>Требования:</strong> ${vacancy.requirements}</p>` : ''}
-            </div>
-            <div class="vacancy-card__meta">
-                ${vacancy.work_date ? `<div class="vacancy-card__date">📅 ${vacancy.work_date}</div>` : ''}
-                ${vacancy.time_start ? `<div class="vacancy-card__time">⏰ ${vacancy.time_start}${vacancy.time_end ? ` - ${vacancy.time_end}` : ''}</div>` : ''}
-                <div class="vacancy-card__payment">💵 ${vacancy.payment} MAIPoints</div>
-            </div>
-            <button class="vacancy-card__button button button--primary" onclick="applyForVacancy('${vacancy.id}')">
-                Откликнуться
-            </button>
-        `;
-        
-        return card;
-    }
-
-    // Обновление состояния кнопок действий
-    async function updateActionButtons() {
-        // Обновляем кнопки мероприятий
-        const eventButtons = document.querySelectorAll('.event-card__button');
-        for (const button of eventButtons) {
-            const eventId = button.closest('.event-card').dataset.eventId;
-            const hasRegistered = await checkEventRegistration(eventId);
-            
-            if (hasRegistered) {
-                button.textContent = 'Записан';
-                button.disabled = true;
-                button.classList.remove('button--primary');
-                button.classList.add('button--secondary');
-            }
+    // Альтернативная загрузка данных
+    async function loadEventsAndVacanciesFallback() {
+        if (typeof eventManager !== 'undefined') {
+            await eventManager.loadEvents();
         }
         
-        // Обновляем кнопки вакансий
-        const vacancyButtons = document.querySelectorAll('.vacancy-card__button');
-        for (const button of vacancyButtons) {
-            const vacancyId = button.closest('.vacancy-card').dataset.vacancyId;
-            const hasApplied = await checkVacancyApplication(vacancyId);
-            
-            if (hasApplied) {
-                button.textContent = 'Отклик отправлен';
-                button.disabled = true;
-                button.classList.remove('button--primary');
-                button.classList.add('button--secondary');
-            }
+        if (typeof vacancyManager !== 'undefined') {
+            await vacancyManager.loadVacancies();
         }
     }
 
-    // Проверка регистрации на мероприятие
-    async function checkEventRegistration(eventId) {
-        try {
-            const response = await fetch('/php/check_event_registration.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({ event_id: eventId })
-            });
-            
-            const result = await response.json();
-            return result.success && result.has_registered;
-        } catch (error) {
-            console.error('Ошибка проверки регистрации:', error);
-            return false;
+    // Получение экземпляра CreateFormsManager
+    function getFormsManager() {
+        // Ищем существующий экземпляр или создаем новый
+        if (window.formsManager) {
+            return window.formsManager;
         }
+        
+        if (typeof CreateFormsManager !== 'undefined') {
+            window.formsManager = new CreateFormsManager();
+            return window.formsManager;
+        }
+        
+        return null;
     }
 
-    // Проверка отклика на вакансию
-    async function checkVacancyApplication(vacancyId) {
-        try {
-            const response = await fetch('/php/check_application_status.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({ vacancy_id: vacancyId })
-            });
-            
-            const result = await response.json();
-            return result.success && result.has_applied;
-        } catch (error) {
-            console.error('Ошибка проверки отклика:', error);
-            return false;
-        }
-    }
-
-    // Функция активации страницы по ID
+    // Активация страницы
     function activatePage(pageId) {
-        console.log('Активируем страницу:', pageId);
+        console.log('🔄 Активируем страницу:', pageId);
         
-        // Убираем активные классы у всех
+        // Сбрасываем активные состояния
         navLinks.forEach(link => link.classList.remove('navbar__link--active'));
         pages.forEach(page => page.classList.remove('active'));
         
-        // Активируем нужную страницу
+        // Активируем целевую страницу
         const targetLink = document.querySelector(`[href="#${pageId}"]`);
         const targetPage = document.getElementById(pageId);
         
@@ -333,83 +194,89 @@ document.addEventListener('DOMContentLoaded', function() {
             targetLink.classList.add('navbar__link--active');
             targetPage.classList.add('active');
             
-            // Если активируем профиль - проверяем нужно ли автоматическое редактирование
-            if (pageId === 'profile') {
-                checkAutoEditMode();
-                loadUserProfile();
-            }
+            // Загружаем данные для активной страницы
+            handlePageActivation(pageId);
             
             return true;
         }
+        
         return false;
     }
 
-    // Загрузка профиля пользователя
-    async function loadUserProfile() {
-        if (!currentUser) return;
-        
-        try {
-            const response = await fetch('/php/get_profile.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username: currentUser.username })
-            });
-            
-            const result = await response.json();
-            
-            if (result.success && result.profile_data) {
-                updateProfileDisplay(result.profile_data);
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки профиля:', error);
+    // Обработка активации страницы
+    function handlePageActivation(pageId) {
+        switch (pageId) {
+            case 'events':
+                loadEventsData();
+                break;
+            case 'topc':
+                loadVacanciesData();
+                break;
+            case 'profile':
+                loadProfileData();
+                break;
         }
     }
 
-    // Обновление отображения профиля
-    function updateProfileDisplay(profileData) {
-        const fields = ['lastname', 'firstname', 'middlename', 'group', 'direction', 'faculty'];
-        
-        fields.forEach(field => {
-            const viewElement = document.getElementById(`profile-${field}-view`);
-            const editElement = document.getElementById(`profile-${field}-edit`);
-            
-            if (viewElement && editElement && profileData[field]) {
-                viewElement.textContent = profileData[field];
-                editElement.value = profileData[field];
-            }
-        });
+    // Загрузка данных мероприятий
+    async function loadEventsData() {
+        console.log('📅 Загружаем данные мероприятий...');
+        // Данные уже загружаются через CreateFormsManager
     }
 
-    // Проверка автоматического режима редактирования
+    // Загрузка данных вакансий
+    async function loadVacanciesData() {
+        console.log('💼 Загружаем данные вакансий...');
+        // Данные уже загружаются через CreateFormsManager
+    }
+
+    // Загрузка данных профиля
+    async function loadProfileData() {
+        console.log('👤 Загружаем данные профиля...');
+        // Проверяем авто-редактирование
+        checkAutoEditMode();
+    }
+
+    // Активация страницы по хэшу
+    function activatePageFromHash() {
+        const hash = window.location.hash;
+        
+        if (hash) {
+            const cleanHash = hash.split('?')[0].substring(1);
+            return activatePage(cleanHash);
+        }
+        
+        return false;
+    }
+
+    // Получение текущей страницы
+    function getCurrentPage() {
+        const activePage = document.querySelector('.page.active');
+        return activePage ? activePage.id : '';
+    }
+
+    // Проверка авто-редактирования профиля
     function checkAutoEditMode() {
         const urlParams = new URLSearchParams(window.location.search);
         const firstLogin = urlParams.get('firstLogin');
         const autoEdit = urlParams.get('autoEdit');
         
-        console.log('Проверка авто-редактирования:', { firstLogin, autoEdit });
-        
-        // Если это первая авторизация или явно указан autoEdit
         if (firstLogin === 'true' || autoEdit === 'true') {
-            console.log('Автоматически включаем режим редактирования');
+            console.log('🔄 Включаем авто-редактирование профиля');
             
-            // Даем небольшую задержку для полной загрузки DOM
             setTimeout(() => {
                 if (typeof toggleEditMode === 'function') {
-                    toggleEditMode(true); // Принудительно включаем редактирование
-                    
-                    // Показываем сообщение для нового пользователя
+                    toggleEditMode(true);
                     showWelcomeMessage();
                 }
             }, 500);
         }
     }
 
-    // Показать приветственное сообщение для нового пользователя
+    // Показать приветственное сообщение
     function showWelcomeMessage() {
-        const welcomeMessage = document.createElement('div');
-        welcomeMessage.style.cssText = `
+        const notification = document.createElement('div');
+        notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
@@ -421,63 +288,18 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             max-width: 300px;
         `;
-        welcomeMessage.innerHTML = `
+        notification.innerHTML = `
             <h4 style="margin: 0 0 8px 0;">Добро пожаловать! 🎉</h4>
             <p style="margin: 0; font-size: 14px;">Заполните свой профиль для начала работы</p>
         `;
         
-        document.body.appendChild(welcomeMessage);
+        document.body.appendChild(notification);
         
-        // Автоматически скрываем через 5 секунд
         setTimeout(() => {
-            welcomeMessage.remove();
+            notification.remove();
         }, 5000);
     }
 
-    // Функция активации по хэшу
-    function activatePageFromHash() {
-        const hash = window.location.hash;
-        console.log('Проверяем хэш:', hash);
-        
-        if (hash) {
-            // Убираем # и ВСЕ параметры после ? в хэше (если есть)
-            const cleanHash = hash.split('?')[0].substring(1);
-            console.log('Очищенный хэш:', cleanHash);
-            return activatePage(cleanHash);
-        }
-        return false;
-    }
-
-    // СНАЧАЛА пробуем активировать по хэшу
-    const hashActivated = activatePageFromHash();
-    
-    // ЕСЛИ хэш не активирован - тогда активируем первую страницу
-    if (!hashActivated) {
-        console.log('Хэш не найден, активируем первую страницу');
-        if (navLinks.length > 0) {
-            const firstPageId = navLinks[0].getAttribute('href').substring(1);
-            activatePage(firstPageId);
-        }
-    }
-
-    // Обработка кликов по навигации
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const pageId = this.getAttribute('href').substring(1);
-            activatePage(pageId);
-            
-            // Обновляем URL (ТОЛЬКО хэш, без параметров)
-            window.location.hash = pageId;
-            
-            // Закрываем мобильное меню
-            if (isMenuOpen) {
-                closeMobileMenu();
-            }
-        });
-    });
-    
     // Функции мобильного меню
     function openMobileMenu() {
         if (navbarMenu) {
@@ -492,147 +314,82 @@ document.addEventListener('DOMContentLoaded', function() {
             isMenuOpen = false;
         }
     }
-    
-    // Управление мобильного меню
-    if (menuToggle && navbarMenu) {
-        menuToggle.addEventListener('click', function() {
-            if (isMenuOpen) {
-                closeMobileMenu();
-            } else {
-                openMobileMenu();
-            }
-        });
-    }
-    
-    // Обработка скролла для скрытия/показа навбара
-    window.addEventListener('scroll', function() {
-        const currentScrollY = window.scrollY;
+
+    // Глобальные вспомогательные функции
+    window.formatDate = function(dateString) {
+        if (!dateString) return '';
         
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            navbar.classList.add('navbar--hidden');
-        } else {
-            navbar.classList.remove('navbar--hidden');
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        } catch (error) {
+            return dateString;
         }
+    };
+
+    window.formatDateTime = function(dateTimeString) {
+        if (!dateTimeString) return '';
         
-        lastScrollY = currentScrollY;
-    });
-    
-    // Закрытие мобильного меню при клике вне его
-    document.addEventListener('click', function(e) {
-        if (isMenuOpen && navbar && !navbar.contains(e.target)) {
-            closeMobileMenu();
+        try {
+            const date = new Date(dateTimeString);
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (error) {
+            return dateTimeString;
         }
-    });
-    
-    // Слушаем изменения хэша
-    window.addEventListener('hashchange', activatePageFromHash);
-    
-    // Проверяем авто-редактирование при загрузке
-    setTimeout(() => {
-        checkAutoEditMode();
-    }, 1000);
-    
-    // Инициализируем приложение
+    };
+
+    // Инициализация приложения
     initializeApp();
-    
-    console.log('Dashboard загружен!');
+    console.log('🎯 Dashboard загружен и готов к работе!');
 });
 
-// Глобальные функции для кнопок
+// Упрощенные глобальные функции для обратной совместимости
 async function registerForEvent(eventId) {
-    if (!await checkAuth()) {
-        alert('Пожалуйста, войдите в систему для записи на мероприятия');
-        return;
-    }
+    console.log('📝 Регистрация на мероприятие:', eventId);
     
-    try {
-        const response = await fetch('/php/apply_event.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ event_id: eventId })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            alert('Вы успешно записались на мероприятие!');
-            // Обновляем кнопку
-            const button = document.querySelector(`[onclick="registerForEvent('${eventId}')"]`);
-            if (button) {
-                button.textContent = 'Записан';
-                button.disabled = true;
-                button.classList.remove('button--primary');
-                button.classList.add('button--secondary');
-            }
-        } else {
-            alert('Ошибка: ' + (result.error || 'Не удалось записаться'));
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Ошибка при записи на мероприятие');
+    // Используем функциональность из CreateFormsManager
+    const formsManager = getFormsManager();
+    if (formsManager && typeof formsManager.handleEventRegister === 'function') {
+        const button = document.querySelector(`[data-event-id="${eventId}"] .event-card__register`);
+        formsManager.handleEventRegister(eventId, button);
+    } else {
+        alert('Функция регистрации временно недоступна');
     }
 }
 
 async function applyForVacancy(vacancyId) {
-    if (!await checkAuth()) {
-        alert('Пожалуйста, войдите в систему для отклика на вакансии');
-        return;
-    }
+    console.log('📨 Отклик на вакансию:', vacancyId);
     
-    try {
-        const response = await fetch('/php/apply_vacancy.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ vacancy_id: vacancyId })
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            alert('Вы успешно откликнулись на вакансию!');
-            // Обновляем кнопку
-            const button = document.querySelector(`[onclick="applyForVacancy('${vacancyId}')"]`);
-            if (button) {
-                button.textContent = 'Отклик отправлен';
-                button.disabled = true;
-                button.classList.remove('button--primary');
-                button.classList.add('button--secondary');
-            }
-        } else {
-            alert('Ошибка: ' + (result.error || 'Не удалось откликнуться'));
+    // Используем функциональность из CreateFormsManager
+    const formsManager = getFormsManager();
+    if (formsManager && typeof formsManager.handleVacancyApply === 'function') {
+        const button = document.querySelector(`[data-vacancy-id="${vacancyId}"] .vacancy-card__apply`);
+        formsManager.handleVacancyApply(vacancyId, button);
+    } else {
+        alert('Функция отклика временно недоступна');
+    }
+}
+
+// Вспомогательная функция для получения менеджера форм
+function getFormsManager() {
+    return window.formsManager || (typeof CreateFormsManager !== 'undefined' ? new CreateFormsManager() : null);
+}
+
+// Резервная инициализация если DOM уже загружен
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(() => {
+        if (typeof initializeApp === 'function') {
+            initializeApp();
         }
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Ошибка при отклике на вакансию');
-    }
-}
-
-// Вспомогательная функция проверки авторизации
-async function checkAuth() {
-    try {
-        const response = await fetch('/php/check_current_user.php', {
-            method: 'GET',
-            credentials: 'include'
-        });
-        
-        const result = await response.json();
-        return result.server.user_id && result.server.user_id !== 'not_set';
-    } catch (error) {
-        return false;
-    }
-}
-
-// Функции для модальных окон создания (заглушки)
-function showCreateEventModal() {
-    alert('Функция создания мероприятия будет реализована позже');
-}
-
-function showCreateVacancyModal() {
-    alert('Функция создания вакансии будет реализована позже');
+    }, 100);
 }
