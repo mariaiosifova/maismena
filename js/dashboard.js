@@ -10,19 +10,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollY = window.scrollY;
     let isMenuOpen = false;
     let currentUser = null;
-    let currentUserRole = 'user';
 
     // Инициализация приложения
     async function initializeApp() {
         try {
+            // Инициализируем менеджер ролей ПЕРВЫМ делом
+            await initializeRoleManager();
+            
             // Проверяем авторизацию
             await checkAuth();
-            
-            // Проверяем роль пользователя
-            await checkUserRole();
-            
-            // Инициализируем менеджеры
-            await initializeManagers();
             
             // Загружаем данные
             await loadAllData();
@@ -35,22 +31,74 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Инициализация менеджера ролей
+    async function initializeRoleManager() {
+        // Используем существующий RoleManager из role-manager.js
+        if (typeof RoleManager !== 'undefined' && window.roleManager) {
+            console.log('✅ RoleManager уже инициализирован');
+            
+            // Проверяем роль пользователя через менеджер
+            const roleChecked = await window.roleManager.checkUserRole();
+            if (roleChecked) {
+                console.log('✅ Роль проверена через RoleManager:', window.roleManager.getCurrentRole());
+            }
+        } else {
+            console.warn('❌ RoleManager не доступен, создаем fallback');
+            // Fallback если RoleManager не загружен
+            await checkUserRoleFallback();
+        }
+    }
+
+    // Fallback проверка роли если RoleManager не доступен
+    async function checkUserRoleFallback() {
+        try {
+            const response = await fetch('/php/check_role.php', {
+                method: 'GET',
+                credentials: 'include'
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Создаем минимальный объект roleManager
+                window.roleManager = {
+                    currentRole: result.role,
+                    currentUsername: result.username,
+                    currentUserId: result.user_id,
+                    getCurrentRole: () => window.roleManager.currentRole,
+                    getUsername: () => window.roleManager.currentUsername,
+                    canCreateEvents: () => window.roleManager.currentRole === 'organizer' || window.roleManager.currentRole === 'admin',
+                    canCreateVacancies: () => window.roleManager.currentRole === 'employer' || window.roleManager.currentRole === 'admin',
+                    isAdmin: () => window.roleManager.currentRole === 'admin'
+                };
+                
+                console.log('✅ Роль получена через fallback:', window.roleManager.currentRole);
+            } else {
+                throw new Error('Не удалось получить роль');
+            }
+        } catch (error) {
+            console.error('❌ Ошибка fallback проверки роли:', error);
+            // Создаем менеджер с ролью по умолчанию
+            window.roleManager = {
+                currentRole: 'user',
+                currentUsername: '',
+                currentUserId: '',
+                getCurrentRole: () => 'user',
+                getUsername: () => '',
+                canCreateEvents: () => false,
+                canCreateVacancies: () => false,
+                isAdmin: () => false
+            };
+        }
+    }
+
     // Инициализация менеджеров
     async function initializeManagers() {
-        // Инициализируем RoleManager если он существует
-        if (typeof RoleManager !== 'undefined') {
-            window.roleManager = new RoleManager();
-            if (currentUser) {
-                window.roleManager.setCurrentUser(currentUser.username);
-            }
-            window.roleManager.setRole(currentUserRole);
-        }
-        
-        // Инициализируем EventManager и VacancyManager
-        if (typeof EventManager !== 'undefined') {
+        // EventManager и VacancyManager инициализируем если нужно
+        if (typeof EventManager !== 'undefined' && !window.eventManager) {
             window.eventManager = new EventManager();
         }
-        if (typeof VacancyManager !== 'undefined') {
+        if (typeof VacancyManager !== 'undefined' && !window.vacancyManager) {
             window.vacancyManager = new VacancyManager();
         }
     }
@@ -78,55 +126,39 @@ document.addEventListener('DOMContentLoaded', function() {
                     id: result.server.user_id,
                     username: result.server.username
                 };
-                console.log('Пользователь авторизован:', currentUser);
+                console.log('✅ Пользователь авторизован:', currentUser);
                 return true;
             } else {
-                console.log('Пользователь не авторизован');
+                console.log('❌ Пользователь не авторизован');
                 return false;
             }
         } catch (error) {
-            console.error('Ошибка проверки авторизации:', error);
+            console.error('❌ Ошибка проверки авторизации:', error);
             return false;
-        }
-    }
-
-    // Проверка роли пользователя
-    async function checkUserRole() {
-        try {
-            const response = await fetch('/php/check_role.php', {
-                method: 'GET',
-                credentials: 'include'
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-                currentUserRole = result.role;
-                console.log('Роль пользователя:', currentUserRole);
-            } else {
-                currentUserRole = 'user';
-                console.log('Роль по умолчанию: user');
-            }
-        } catch (error) {
-            console.error('Ошибка проверки роли:', error);
-            currentUserRole = 'user';
         }
     }
 
     // Обновление интерфейса в зависимости от роли
     function updateUIForRole() {
-        console.log('Обновление интерфейса для роли:', currentUserRole);
-        
-        // Устанавливаем роль в roleManager если он существует
-        if (window.roleManager) {
-            window.roleManager.setRole(currentUserRole);
+        if (!window.roleManager) {
+            console.warn('❌ RoleManager не доступен для обновления UI');
+            return;
         }
         
-        // Если пользователь организатор или админ, показываем кнопки создания
-        if (currentUserRole === 'organizer' || currentUserRole === 'admin') {
-            showCreateButtons();
+        const currentRole = window.roleManager.getCurrentRole();
+        console.log('🎨 Обновляем интерфейс для роли:', currentRole);
+        
+        // Используем методы RoleManager для проверки прав
+        if (window.roleManager.canCreateEvents()) {
+            showCreateEventButton();
         } else {
-            hideCreateButtons();
+            hideCreateEventButton();
+        }
+        
+        if (window.roleManager.canCreateVacancies()) {
+            showCreateVacancyButton();
+        } else {
+            hideCreateVacancyButton();
         }
         
         // Обновляем отображение кнопок записи/отклика
@@ -136,9 +168,10 @@ document.addEventListener('DOMContentLoaded', function() {
         showRoleIndicator();
     }
 
-    // Показать кнопки создания для организаторов и админов
-    function showCreateButtons() {
-        console.log('Показываем кнопки создания для роли:', currentUserRole);
+    // Показать кнопку создания мероприятия
+    function showCreateEventButton() {
+        const currentRole = window.roleManager.getCurrentRole();
+        console.log('✅ Показываем кнопку создания мероприятия для роли:', currentRole);
         
         // Добавляем кнопку создания мероприятия
         const eventsHeader = document.querySelector('#events .page__header');
@@ -150,8 +183,25 @@ document.addEventListener('DOMContentLoaded', function() {
             createEventBtn.style.marginLeft = '20px';
             createEventBtn.onclick = showCreateEventModal;
             eventsHeader.appendChild(createEventBtn);
-            console.log('Кнопка создания мероприятия добавлена');
+            console.log('✅ Кнопка создания мероприятия добавлена');
         }
+    }
+
+    // Скрыть кнопку создания мероприятия
+    function hideCreateEventButton() {
+        console.log('❌ Скрываем кнопку создания мероприятия');
+        
+        const createEventBtn = document.getElementById('create-event-btn');
+        if (createEventBtn) {
+            createEventBtn.remove();
+            console.log('✅ Кнопка создания мероприятия удалена');
+        }
+    }
+
+    // Показать кнопку создания вакансии
+    function showCreateVacancyButton() {
+        const currentRole = window.roleManager.getCurrentRole();
+        console.log('✅ Показываем кнопку создания вакансии для роли:', currentRole);
         
         // Добавляем кнопку создания вакансии
         const vacanciesHeader = document.querySelector('#topc .page__header');
@@ -163,31 +213,28 @@ document.addEventListener('DOMContentLoaded', function() {
             createVacancyBtn.style.marginLeft = '20px';
             createVacancyBtn.onclick = showCreateVacancyModal;
             vacanciesHeader.appendChild(createVacancyBtn);
-            console.log('Кнопка создания вакансии добавлена');
+            console.log('✅ Кнопка создания вакансии добавлена');
         }
     }
 
-    // Скрыть кнопки создания для обычных пользователей
-    function hideCreateButtons() {
-        console.log('Скрываем кнопки создания для роли:', currentUserRole);
+    // Скрыть кнопку создания вакансии
+    function hideCreateVacancyButton() {
+        console.log('❌ Скрываем кнопку создания вакансии');
         
-        // Удаляем кнопку создания мероприятия если существует
-        const createEventBtn = document.getElementById('create-event-btn');
-        if (createEventBtn) {
-            createEventBtn.remove();
-            console.log('Кнопка создания мероприятия удалена');
-        }
-        
-        // Удаляем кнопку создания вакансии если существует
         const createVacancyBtn = document.getElementById('create-vacancy-btn');
         if (createVacancyBtn) {
             createVacancyBtn.remove();
-            console.log('Кнопка создания вакансии удалена');
+            console.log('✅ Кнопка создания вакансии удалена');
         }
     }
 
     // Показать индикатор роли (опционально, для отладки)
     function showRoleIndicator() {
+        if (!window.roleManager) return;
+        
+        const currentRole = window.roleManager.getCurrentRole();
+        const username = window.roleManager.getUsername();
+        
         // Удаляем старый индикатор если есть
         const oldIndicator = document.getElementById('role-indicator');
         if (oldIndicator) {
@@ -201,25 +248,51 @@ document.addEventListener('DOMContentLoaded', function() {
             position: fixed;
             top: 10px;
             left: 10px;
-            background: ${currentUserRole === 'admin' ? '#ff6b6b' : currentUserRole === 'organizer' ? '#4ecdc4' : '#95e1d3'};
+            background: ${getRoleColor(currentRole)};
             color: white;
-            padding: 5px 10px;
+            padding: 8px 12px;
             border-radius: 15px;
             font-size: 12px;
             z-index: 1000;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: help;
+            max-width: 200px;
         `;
-        roleIndicator.textContent = `Роль: ${currentUserRole}`;
-        roleIndicator.title = `Текущая роль пользователя: ${currentUserRole}`;
+        roleIndicator.innerHTML = `
+            <div><strong>Роль:</strong> ${currentRole}</div>
+            ${username ? `<div><strong>Пользователь:</strong> ${username}</div>` : ''}
+        `;
+        roleIndicator.title = `Текущая роль: ${currentRole}${username ? `, пользователь: ${username}` : ''}`;
         
         document.body.appendChild(roleIndicator);
         
-        // Автоматически скрываем через 5 секунд
+        // Автоматически скрываем через 8 секунд
         setTimeout(() => {
             if (roleIndicator.parentNode) {
-                roleIndicator.style.opacity = '0.7';
+                roleIndicator.style.opacity = '0.3';
+                roleIndicator.style.transition = 'opacity 1s';
+                
+                // При наведении снова показываем
+                roleIndicator.addEventListener('mouseenter', () => {
+                    roleIndicator.style.opacity = '1';
+                });
+                
+                roleIndicator.addEventListener('mouseleave', () => {
+                    roleIndicator.style.opacity = '0.3';
+                });
             }
-        }, 5000);
+        }, 8000);
+    }
+
+    // Получить цвет для роли
+    function getRoleColor(role) {
+        const colors = {
+            'admin': '#ff6b6b',
+            'organizer': '#4ecdc4', 
+            'employer': '#ffd93d',
+            'user': '#95e1d3'
+        };
+        return colors[role] || '#95e1d3';
     }
 
     // Загрузка мероприятий
@@ -901,7 +974,7 @@ function handleSuccessfulVacancyApplication(vacancyId) {
     alert('Вы успешно откликнулись на вакансию!');
     
     // Обновляем кнопку
-    const button = document.querySelector(`[onclick="applyForVacancy('${eventId}')"]`);
+    const button = document.querySelector(`[onclick="applyForVacancy('${vacancyId}')"]`);
     if (button) {
         button.textContent = 'Отклик отправлен';
         button.disabled = true;
@@ -952,75 +1025,4 @@ function formatDate(dateString) {
     
     try {
         const date = new Date(dateString);
-        return date.toLocaleDateString('ru-RU', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
-    } catch (error) {
-        return dateString;
-    }
-}
-
-// Функции для модальных окон создания
-function showCreateEventModal() {
-    // Проверяем права
-    if (!window.roleManager || !window.roleManager.canCreateEvents()) {
-        alert('Недостаточно прав для создания мероприятий');
-        return;
-    }
-    
-    // Здесь будет реализация модального окна создания мероприятия
-    alert('Функция создания мероприятия будет реализована позже');
-}
-
-function showCreateVacancyModal() {
-    // Проверяем права
-    if (!window.roleManager || !window.roleManager.canCreateVacancies()) {
-        alert('Недостаточно прав для создания вакансий');
-        return;
-    }
-    
-    // Здесь будет реализация модального окна создания вакансии
-    alert('Функция создания вакансии будет реализована позже');
-}
-
-// Добавляем класс RoleManager если он не существует
-if (typeof RoleManager === 'undefined') {
-    class RoleManager {
-        constructor() {
-            this.currentRole = 'user';
-            this.currentUsername = '';
-        }
-        
-        setRole(role) {
-            this.currentRole = role;
-        }
-        
-        setCurrentUser(username) {
-            this.currentUsername = username;
-        }
-        
-        canCreateEvents() {
-            return this.currentRole === 'organizer' || this.currentRole === 'admin';
-        }
-        
-        canCreateVacancies() {
-            return this.currentRole === 'organizer' || this.currentRole === 'admin';
-        }
-        
-        isAdmin() {
-            return this.currentRole === 'admin';
-        }
-        
-        isOrganizer() {
-            return this.currentRole === 'organizer';
-        }
-        
-        isUser() {
-            return this.currentRole === 'user';
-        }
-    }
-    
-    window.RoleManager = RoleManager;
-}
+        return date.toLocaleDate
