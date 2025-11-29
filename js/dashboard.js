@@ -94,8 +94,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Проверяем хэш:', hash);
         
         if (hash) {
-            const pageId = hash.substring(1); // Убираем #
-            return activatePage(pageId);
+            // Убираем # и ВСЕ параметры после ? в хэше (если есть)
+            const cleanHash = hash.split('?')[0].substring(1);
+            console.log('Очищенный хэш:', cleanHash);
+            return activatePage(cleanHash);
         }
         return false;
     }
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const pageId = this.getAttribute('href').substring(1);
             activatePage(pageId);
             
-            // Обновляем URL
+            // Обновляем URL (ТОЛЬКО хэш, без параметров)
             window.location.hash = pageId;
             
             // Закрываем мобильное меню
@@ -179,11 +181,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Слушаем изменения хэша
     window.addEventListener('hashchange', activatePageFromHash);
     
-    // Проверяем авто-редактирование при загрузке (на случай если сразу открыт профиль)
+    // Проверяем авто-редактирование при загрузке
     setTimeout(() => {
-        if (window.location.hash === '#profile') {
-            checkAutoEditMode();
-        }
+        checkAutoEditMode();
     }, 1000);
     
     console.log('Dashboard загружен!');
