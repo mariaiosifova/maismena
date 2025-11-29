@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = modal ? modal.querySelector('.close') : null;
     const registrationForm = document.getElementById('registration-form');
 
-     initTelegramWebApp();
+    initTelegramWebApp();
     
     console.log('Found elements:', { modal, regBtn, closeBtn, registrationForm });
 
@@ -81,11 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(result.error || 'Ошибка сервера');
                 }
 
-                // УСПЕШНАЯ РЕГИСТРАЦИЯ - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
+                // УСПЕШНАЯ РЕГИСТРАЦИЯ
                 console.log('Регистрация успешна, делаю редирект...');
                 modal.style.display = 'none';
-                // После успешной регистрации
-                window.location.href = '/dashboard.html#profile?firstLogin=true';
+                
+                // Показываем сообщение об успехе
+                alert('Регистрация успешна! Перенаправляем в личный кабинет...');
+                
+                // Редирект с таймаутом для визуального подтверждения
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html#profile?firstLogin=true&autoEdit=true';
+                }, 1000);
 
             } catch (error) {
                 console.error('Ошибка регистрации:', error);
@@ -209,9 +215,12 @@ function showLoginModal() {
             }
 
             // Успешный вход
-            alert('Вход выполнен успешно!');
+            alert('Вход выполнен успешно! Перенаправляем в личный кабинет...');
             loginModal.remove();
-            window.location.href = '/dashboard.html#profile?firstLogin=true';
+            
+            setTimeout(() => {
+                window.location.href = 'dashboard.html#profile?firstLogin=true';
+            }, 1000);
 
         } catch (error) {
             console.error('Ошибка входа:', error);
@@ -316,10 +325,12 @@ function showTgReg() {
             }
 
             // Успешная регистрация
-            alert('Регистрация через Telegram выполнена успешно!');
+            alert('Регистрация через Telegram выполнена успешно! Перенаправляем в личный кабинет...');
             tgModal.remove();
-            // После успешной регистрации
-            window.location.href = '/dashboard.html#profile?firstLogin=true&autoEdit=true';
+            
+            setTimeout(() => {
+                window.location.href = 'dashboard.html#profile?firstLogin=true&autoEdit=true';
+            }, 1000);
 
         } catch (error) {
             console.error('Ошибка регистрации:', error);
@@ -331,7 +342,6 @@ function showTgReg() {
         }
     });
 }
-
 
 function initTelegramWebApp() {
     // Проверяем, находимся ли мы в Telegram
