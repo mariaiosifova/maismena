@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = modal ? modal.querySelector('.close') : null;
     const registrationForm = document.getElementById('registration-form');
     
-
     console.log('Found elements:', { modal, regBtn, closeBtn, registrationForm });
 
     // Если элементы регистрации есть - настраиваем их
@@ -31,75 +30,70 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-            // Обработка формы регистрации
-    registrationForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        console.log('Form submitted');
-        
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
+        // Обработка формы регистрации
+        registrationForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            console.log('Form submitted');
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
 
-        console.log('Form data:', { username, password });
+            console.log('Form data:', { username, password });
 
-        // Валидация
-        if (username.length < 3) {
-            alert('Логин должен быть не менее 3 символов');
-            return;
-        }
-        if (password.length < 6) {
-            alert('Пароль должен быть не менее 6 символов');
-            return;
-        }
-
-        try {
-            // Показываем загрузку
-            const submitBtn = registrationForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Регистрация...';
-            submitBtn.disabled = true;
-
-            console.log('Sending registration request...');
-
-            // Отправляем запрос регистрации
-            const response = await fetch('/php/register.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            });
-
-            console.log('Response status:', response.status);
-            const result = await response.json();
-            console.log('Response data:', result);
-
-            if (!response.ok) {
-                throw new Error(result.error || 'Ошибка сервера');
+            // Валидация
+            if (username.length < 3) {
+                alert('Логин должен быть не менее 3 символов');
+                return;
+            }
+            if (password.length < 6) {
+                alert('Пароль должен быть не менее 6 символов');
+                return;
             }
 
-            // УСПЕШНАЯ РЕГИСТРАЦИЯ - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
-            modal.style.display = 'none';
-            // Успех - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
-            console.log('Регистрация успешна, делаю редирект...');
-            console.log('Response OK:', response.ok);
-            console.log('Result:', result);
+            try {
+                // Показываем загрузку
+                const submitBtn = registrationForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Регистрация...';
+                submitBtn.disabled = true;
 
-            modal.style.display = 'none';
-            window.location.href = 'dashboard.html#profile'; // ← Редирект сразу в личный кабинет
+                console.log('Sending registration request...');
 
-        } catch (error) {
-            console.error('Ошибка регистрации:', error);
-            alert('Ошибка регистрации: ' + error.message);
-            
-            // Восстанавливаем кнопку
-            const submitBtn = registrationForm.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Зарегистрироваться';
-            submitBtn.disabled = false;
-        }
-    });
+                // Отправляем запрос регистрации
+                const response = await fetch('/php/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                console.log('Response status:', response.status);
+                const result = await response.json();
+                console.log('Response data:', result);
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Ошибка сервера');
+                }
+
+                // УСПЕШНАЯ РЕГИСТРАЦИЯ - БЕЗ ALERT, СРАЗУ РЕДИРЕКТ
+                console.log('Регистрация успешна, делаю редирект...');
+                modal.style.display = 'none';
+                window.location.href = 'dashboard.html#profile';
+
+            } catch (error) {
+                console.error('Ошибка регистрации:', error);
+                alert('Ошибка регистрации: ' + error.message);
+                
+                // Восстанавливаем кнопку
+                const submitBtn = registrationForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Зарегистрироваться';
+                submitBtn.disabled = false;
+            }
+        });
     }
 
     // Обработка кнопки "Войти" в шапке
@@ -118,9 +112,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showLoginModal();
             });
         }
+    });
 
-        const regTgBtn = document.querySelectorAll('.button--tgreg');
-    mainLoginBtns.forEach(btn => {
+    // Обработка кнопки "TG-регистрация"
+    const regTgBtns = document.querySelectorAll('.button--tgreg');
+    regTgBtns.forEach(btn => {
         if (btn.textContent.includes('TG-регистрация')) {
             btn.addEventListener('click', () => {
                 showTgReg();
@@ -210,10 +206,9 @@ function showLoginModal() {
             }
 
             // Успешный вход
-alert('Вход выполнен успешно!');
-loginModal.remove();
-window.location.href = '/dashboard.html#profile?firstLogin=true';
-            
+            alert('Вход выполнен успешно!');
+            loginModal.remove();
+            window.location.href = '/dashboard.html#profile?firstLogin=true';
 
         } catch (error) {
             console.error('Ошибка входа:', error);
@@ -227,104 +222,108 @@ window.location.href = '/dashboard.html#profile?firstLogin=true';
 }
 
 function showTgReg() {
-    // Создаем модальное окно входа
-    const tg = window.Telegram.WebApp;
-    tg.expand;
+    // Проверяем, доступен ли Telegram WebApp
+    if (typeof Telegram === 'undefined' || !Telegram.WebApp) {
+        alert('Telegram WebApp не доступен');
+        return;
+    }
+
+    const tg = Telegram.WebApp;
+    tg.expand();
     const user = tg.initDataUnsafe?.user;
     
-    const loginModal = document.createElement('div');
-    loginModal.className = 'modal';
-    loginModal.style.display = 'block';
-    loginModal.innerHTML = `
+    if (!user || !user.username) {
+        alert('Не удалось получить данные пользователя Telegram');
+        return;
+    }
+
+    // Создаем модальное окно регистрации через Telegram
+    const tgModal = document.createElement('div');
+    tgModal.className = 'modal';
+    tgModal.style.display = 'block';
+    tgModal.innerHTML = `
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Вход в систему</h2>
-            <form id="login-form">
+            <h2>Регистрация через Telegram</h2>
+            <p>Вы регистрируетесь как: <strong>@${user.username}</strong></p>
+            <form id="tg-reg-form">
                 <div class="form-group">
-                    <label for="login-username">Логин:</label>
-                    <input type="text" id="login-username" name="username" required>
+                    <label for="tg-username">Логин:</label>
+                    <input type="text" id="tg-username" name="username" value="${user.username}" required readonly>
                 </div>
                 <div class="form-group">
-                    <label for="login-password">Пароль:</label>
-                    <input type="password" id="login-password" name="password" required>
+                    <label for="tg-password">Придумайте пароль:</label>
+                    <input type="password" id="tg-password" name="password" required>
                 </div>
-                <button type="submit" class="button button--primary">Войти</button>
+                <button type="submit" class="button button--primary">Зарегистрироваться</button>
             </form>
         </div>
     `;
 
-    document.body.appendChild(loginModal);
-    document.getElementById('login-username').value = user.username
-    document.getElementById('login-password').value;
+    document.body.appendChild(tgModal);
 
     // Закрытие модального окна
-    const closeBtn = loginModal.querySelector('.close');
+    const closeBtn = tgModal.querySelector('.close');
     closeBtn.addEventListener('click', () => {
-        loginModal.remove();
+        tgModal.remove();
     });
 
     // Закрытие при клике вне окна
-    loginModal.addEventListener('click', (event) => {
-        if (event.target === loginModal) {
-            loginModal.remove();
+    tgModal.addEventListener('click', (event) => {
+        if (event.target === tgModal) {
+            tgModal.remove();
         }
     });
 
-    // Обработка формы входа
-    const loginForm = loginModal.querySelector('#login-form');
-    loginForm.addEventListener('submit', async (event) => {
+    // Обработка формы регистрации через Telegram
+    const tgRegForm = tgModal.querySelector('#tg-reg-form');
+    tgRegForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        const username = document.getElementById('login-username').value.trim();
-        const password = document.getElementById('login-password').value;
+        const username = document.getElementById('tg-username').value.trim();
+        const password = document.getElementById('tg-password').value;
 
         // Валидация
-        if (username.length < 3) {
-            alert('Логин должен быть не менее 3 символов');
-            return;
-        }
         if (password.length < 6) {
             alert('Пароль должен быть не менее 6 символов');
             return;
         }
 
         try {
-            const submitBtn = loginForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Вход...';
+            const submitBtn = tgRegForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Регистрация...';
             submitBtn.disabled = true;
 
-            const response = await fetch('/php/login.php', {
+            const response = await fetch('/php/register.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     username: username,
-                    password: password
+                    password: password,
+                    telegram_id: user.id
                 })
             });
 
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.error || 'Ошибка входа');
+                throw new Error(result.error || 'Ошибка регистрации');
             }
 
-            // Успешный вход
-alert('Вход выполнен успешно!');
-loginModal.remove();
-window.location.href = '/dashboard.html#profile?firstLogin=true';
-            
+            // Успешная регистрация
+            alert('Регистрация через Telegram выполнена успешно!');
+            tgModal.remove();
+            window.location.href = '/dashboard.html#profile';
 
         } catch (error) {
-            console.error('Ошибка входа:', error);
-            alert('Ошибка входа: ' + error.message);
+            console.error('Ошибка регистрации:', error);
+            alert('Ошибка регистрации: ' + error.message);
             
-            const submitBtn = loginForm.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Войти';
+            const submitBtn = tgRegForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Зарегистрироваться';
             submitBtn.disabled = false;
         }
     });
 }
-
