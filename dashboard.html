@@ -37,12 +37,12 @@
 
     <!-- Основной контент -->
     <main class="dashboard">
-        <!-- Лента мероприятий -->
+        <!-- Лента мероприятий (активная по умолчанию) -->
         <section id="events" class="page active">
             <div class="page__header">
                 <h1>Лента мероприятий</h1>
-                <!-- УБРАЛ display: none - кнопка всегда видна -->
-                <button id="create-event-btn" class="button button--primary">
+                <!-- Кнопка создания мероприятия - изначально скрыта -->
+                <button id="create-event-btn" class="button button--primary" style="display: none;">
                     + Создать мероприятие
                 </button>
             </div>
@@ -108,7 +108,7 @@
             </div>
             
             <div class="events-grid" id="events-grid">
-                <!-- Динамические мероприятия будут загружаться здесь -->
+                <!-- Карточки мероприятий будут загружаться динамически -->
             </div>
         </section>
 
@@ -116,8 +116,8 @@
         <section id="topc" class="page">
             <div class="page__header">
                 <h1>Вакансии ТОПс</h1>
-                <!-- УБРАЛ display: none - кнопка всегда видна -->
-                <button id="create-vacancy-btn" class="button button--primary">
+                <!-- Кнопка создания вакансии - изначально скрыта -->
+                <button id="create-vacancy-btn" class="button button--primary" style="display: none;">
                     + Создать вакансию
                 </button>
             </div>
@@ -172,7 +172,7 @@
             </div>
             
             <div class="vacancies-list" id="vacancies-list">
-                <!-- Динамические вакансии будут загружаться здесь -->
+                <!-- Карточки вакансий будут загружаться динамически -->
             </div>
         </section>
 
