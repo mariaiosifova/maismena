@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const regBtn = document.getElementById('reg-btn');
     const closeBtn = modal ? modal.querySelector('.close') : null;
     const registrationForm = document.getElementById('registration-form');
+
+     initTelegramWebApp();
     
     console.log('Found elements:', { modal, regBtn, closeBtn, registrationForm });
 
@@ -326,4 +328,27 @@ function showTgReg() {
             submitBtn.disabled = false;
         }
     });
+}
+
+
+function initTelegramWebApp() {
+    // Проверяем, находимся ли мы в Telegram
+    if (window.Telegram && window.Telegram.WebApp) {
+        console.log('Telegram WebApp detected');
+        const tg = window.Telegram.WebApp;
+        
+        // Инициализируем WebApp
+        tg.ready();
+        tg.expand();
+        
+        // Сохраняем в глобальной области для доступа из других функций
+        window.tg = tg;
+        
+        console.log('Telegram user:', tg.initDataUnsafe?.user);
+        console.log('Telegram init data:', tg.initData);
+        
+    } else {
+        console.log('Not in Telegram WebApp environment');
+        window.tg = null;
+    }
 }
