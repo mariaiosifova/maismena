@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Регистрация успешна, делаю редирект...');
                 modal.style.display = 'none';
                 // После успешной регистрации
-                window.location.href = '/dashboard.html#profile?firstLogin=true&autoEdit=true';
+                window.location.href = '/dashboard.html#profile?firstLogin=true';
 
             } catch (error) {
                 console.error('Ошибка регистрации:', error);
