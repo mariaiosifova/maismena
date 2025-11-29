@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const regBtn = document.getElementById('reg-btn');
     const closeBtn = modal ? modal.querySelector('.close') : null;
     const registrationForm = document.getElementById('registration-form');
+    
 
     console.log('Found elements:', { modal, regBtn, closeBtn, registrationForm });
 
