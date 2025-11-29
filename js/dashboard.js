@@ -745,60 +745,53 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    // Функции мобильного меню
-    function openMobileMenu() {
-        if (navbarMenu) {
-            navbarMenu.classList.add('navbar__menu--open');
-            isMenuOpen = true;
-        }
+
+
+   // Функции мобильного меню
+function openMobileMenu() {
+    if (navbarMenu) {
+        navbarMenu.classList.add('navbar__menu--open');
+        menuToggle.classList.add('navbar__toggle--active');
+        isMenuOpen = true;
     }
-    
-    function closeMobileMenu() {
-        if (navbarMenu) {
-            navbarMenu.classList.remove('navbar__menu--open');
-            isMenuOpen = false;
-        }
+}
+
+function closeMobileMenu() {
+    if (navbarMenu) {
+        navbarMenu.classList.remove('navbar__menu--open');
+        menuToggle.classList.remove('navbar__toggle--active');
+        isMenuOpen = false;
     }
-    
-    // Управление мобильного меню
-    if (menuToggle && navbarMenu) {
-        menuToggle.addEventListener('click', function() {
-            if (isMenuOpen) {
-                closeMobileMenu();
-            } else {
-                openMobileMenu();
-            }
-        });
-    }
-    
-    // Обработка скролла для скрытия/показа навбара
-    window.addEventListener('scroll', function() {
-        const currentScrollY = window.scrollY;
+}
+
+// Управление мобильного меню
+if (menuToggle && navbarMenu) {
+    menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation(); // Предотвращаем всплытие
         
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-            navbar.classList.add('navbar--hidden');
+        if (isMenuOpen) {
+            closeMobileMenu();
         } else {
-            navbar.classList.remove('navbar--hidden');
+            openMobileMenu();
         }
-        
-        lastScrollY = currentScrollY;
     });
-    
-    // Закрытие мобильного меню при клике вне его
-    document.addEventListener('click', function(e) {
-        if (isMenuOpen && navbar && !navbar.contains(e.target)) {
+}
+
+// Закрытие мобильного меню при клике вне его
+document.addEventListener('click', function(e) {
+    if (isMenuOpen && navbar && !navbar.contains(e.target)) {
+        closeMobileMenu();
+    }
+});
+
+// Закрытие мобильного меню при клике на ссылку внутри меню
+navLinks.forEach(link => {
+    link.addEventListener('click', function() {
+        if (isMenuOpen) {
             closeMobileMenu();
         }
     });
-    
-    // Слушаем изменения хэша
-    window.addEventListener('hashchange', activatePageFromHash);
-    
-    // Проверяем авто-редактирование при загрузке
-    setTimeout(() => {
-        checkAutoEditMode();
-    }, 1000);
+});
     
     // Инициализируем приложение
     initializeApp();
