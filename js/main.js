@@ -247,7 +247,7 @@ function showTgReg() {
     tgModal.innerHTML = `
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Регистрация через Telegram</h2>
+            <h2>Регистрация через TG</h2>
             <p>Вы регистрируетесь как: <strong>@${user.username}</strong></p>
             <form id="tg-reg-form">
                 <div class="form-group">
