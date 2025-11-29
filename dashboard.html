@@ -147,36 +147,42 @@
         <div class="profile__info">
             <div class="profile__field">
                 <label for="profile-lastname">Фамилия:</label>
-                <span class="profile__value" id="profile-lastname-view">Иванов</span>
-                <input type="text" class="profile__input" id="profile-lastname-edit" value="Иванов" style="display: none;">
+                <span class="profile__value" id="profile-lastname-view">Не указано</span>
+                <input type="text" class="profile__input" id="profile-lastname-edit" value="Не указано" style="display: none;">
             </div>
             <div class="profile__field">
                 <label for="profile-firstname">Имя:</label>
-                <span class="profile__value" id="profile-firstname-view">Иван</span>
-                <input type="text" class="profile__input" id="profile-firstname-edit" value="Иван" style="display: none;">
+                <span class="profile__value" id="profile-firstname-view">Не указано</span>
+                <input type="text" class="profile__input" id="profile-firstname-edit" value="Не указано" style="display: none;">
             </div>
             <div class="profile__field">
                 <label for="profile-middlename">Отчество:</label>
-                <span class="profile__value" id="profile-middlename-view">Иванович</span>
-                <input type="text" class="profile__input" id="profile-middlename-edit" value="Иванович" style="display: none;">
+                <span class="profile__value" id="profile-middlename-view">Не указано</span>
+                <input type="text" class="profile__input" id="profile-middlename-edit" value="Не указано" style="display: none;">
             </div>
             <div class="profile__field">
                 <label for="profile-group">Группа:</label>
-                <span class="profile__value" id="profile-group-view">М1О-101Б-23</span>
-                <input type="text" class="profile__input" id="profile-group-edit" value="М1О-101Б-23" style="display: none;">
+                <span class="profile__value" id="profile-group-view">Не указана</span>
+                <input type="text" class="profile__input" id="profile-group-edit" value="Не указана" style="display: none;">
             </div>
             <div class="profile__field">
                 <label for="profile-direction">Направление:</label>
-                <span class="profile__value" id="profile-direction-view">Программная инженерия</span>
-                <input type="text" class="profile__input" id="profile-direction-edit" value="Программная инженерия" style="display: none;">
+                <span class="profile__value" id="profile-direction-view">Не указано</span>
+                <input type="text" class="profile__input" id="profile-direction-edit" value="Не указано" style="display: none;">
             </div>
             <div class="profile__field">
                 <label for="profile-faculty">Факультет:</label>
-                <span class="profile__value" id="profile-faculty-view">ФКЦИН</span>
-                <input type="text" class="profile__input" id="profile-faculty-edit" value="ФКЦИН" style="display: none;">
+                <span class="profile__value" id="profile-faculty-view">Не указан</span>
+                <input type="text" class="profile__input" id="profile-faculty-edit" value="Не указан" style="display: none;">
             </div>
         </div>
     </div>
+    <div class="profile__actions">
+        <button class="profile__edit" id="edit-profile-btn" onclick="toggleEditMode()">Редактировать профиль</button>
+        <button class="profile__save" id="save-profile-btn" onclick="saveProfile()" style="display: none;">Сохранить изменения</button>
+        <button class="profile__cancel" id="cancel-edit-btn" onclick="cancelEdit()" style="display: none;">Отмена</button>
+    </div>
+</section>
     <div class="profile__actions">
         <button class="profile__edit" id="edit-profile-btn" onclick="toggleEditMode()">Редактировать профиль</button>
         <button class="profile__save" id="save-profile-btn" onclick="saveProfile()" style="display: none;">Сохранить изменения</button>
