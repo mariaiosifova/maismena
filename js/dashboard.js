@@ -10,12 +10,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollY = window.scrollY;
     let isMenuOpen = false;
     let currentUser = null;
+    let currentUserRole = 'user';
 
     // Инициализация приложения
     async function initializeApp() {
         try {
             // Проверяем авторизацию
             await checkAuth();
+            
+            // Проверяем роль пользователя
+            await checkUserRole();
             
             // Инициализируем менеджеры
             await initializeManagers();
@@ -24,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             await loadAllData();
             
             // Обновляем интерфейс в зависимости от роли
-            await updateUIForRole();
+            updateUIForRole();
             
         } catch (error) {
             console.error('Ошибка инициализации:', error);
@@ -39,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (currentUser) {
                 window.roleManager.setCurrentUser(currentUser.username);
             }
+            window.roleManager.setRole(currentUserRole);
         }
         
         // Инициализируем EventManager и VacancyManager
@@ -96,37 +101,45 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
             
             if (result.success) {
-                return result.role;
+                currentUserRole = result.role;
+                console.log('Роль пользователя:', currentUserRole);
             } else {
-                return 'user';
+                currentUserRole = 'user';
+                console.log('Роль по умолчанию: user');
             }
         } catch (error) {
             console.error('Ошибка проверки роли:', error);
-            return 'user';
+            currentUserRole = 'user';
         }
     }
 
     // Обновление интерфейса в зависимости от роли
-    async function updateUIForRole() {
-        const role = await checkUserRole();
-        console.log('Роль пользователя:', role);
+    function updateUIForRole() {
+        console.log('Обновление интерфейса для роли:', currentUserRole);
         
         // Устанавливаем роль в roleManager если он существует
         if (window.roleManager) {
-            window.roleManager.setRole(role);
+            window.roleManager.setRole(currentUserRole);
         }
         
         // Если пользователь организатор или админ, показываем кнопки создания
-        if (role === 'organizer' || role === 'admin') {
+        if (currentUserRole === 'organizer' || currentUserRole === 'admin') {
             showCreateButtons();
+        } else {
+            hideCreateButtons();
         }
         
         // Обновляем отображение кнопок записи/отклика
         updateActionButtons();
+        
+        // Показываем информацию о роли в интерфейсе (опционально)
+        showRoleIndicator();
     }
 
-    // Показать кнопки создания для организаторов
+    // Показать кнопки создания для организаторов и админов
     function showCreateButtons() {
+        console.log('Показываем кнопки создания для роли:', currentUserRole);
+        
         // Добавляем кнопку создания мероприятия
         const eventsHeader = document.querySelector('#events .page__header');
         if (eventsHeader && !document.getElementById('create-event-btn')) {
@@ -137,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             createEventBtn.style.marginLeft = '20px';
             createEventBtn.onclick = showCreateEventModal;
             eventsHeader.appendChild(createEventBtn);
+            console.log('Кнопка создания мероприятия добавлена');
         }
         
         // Добавляем кнопку создания вакансии
@@ -149,7 +163,63 @@ document.addEventListener('DOMContentLoaded', function() {
             createVacancyBtn.style.marginLeft = '20px';
             createVacancyBtn.onclick = showCreateVacancyModal;
             vacanciesHeader.appendChild(createVacancyBtn);
+            console.log('Кнопка создания вакансии добавлена');
         }
+    }
+
+    // Скрыть кнопки создания для обычных пользователей
+    function hideCreateButtons() {
+        console.log('Скрываем кнопки создания для роли:', currentUserRole);
+        
+        // Удаляем кнопку создания мероприятия если существует
+        const createEventBtn = document.getElementById('create-event-btn');
+        if (createEventBtn) {
+            createEventBtn.remove();
+            console.log('Кнопка создания мероприятия удалена');
+        }
+        
+        // Удаляем кнопку создания вакансии если существует
+        const createVacancyBtn = document.getElementById('create-vacancy-btn');
+        if (createVacancyBtn) {
+            createVacancyBtn.remove();
+            console.log('Кнопка создания вакансии удалена');
+        }
+    }
+
+    // Показать индикатор роли (опционально, для отладки)
+    function showRoleIndicator() {
+        // Удаляем старый индикатор если есть
+        const oldIndicator = document.getElementById('role-indicator');
+        if (oldIndicator) {
+            oldIndicator.remove();
+        }
+        
+        // Создаем новый индикатор
+        const roleIndicator = document.createElement('div');
+        roleIndicator.id = 'role-indicator';
+        roleIndicator.style.cssText = `
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: ${currentUserRole === 'admin' ? '#ff6b6b' : currentUserRole === 'organizer' ? '#4ecdc4' : '#95e1d3'};
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        `;
+        roleIndicator.textContent = `Роль: ${currentUserRole}`;
+        roleIndicator.title = `Текущая роль пользователя: ${currentUserRole}`;
+        
+        document.body.appendChild(roleIndicator);
+        
+        // Автоматически скрываем через 5 секунд
+        setTimeout(() => {
+            if (roleIndicator.parentNode) {
+                roleIndicator.style.opacity = '0.7';
+            }
+        }, 5000);
     }
 
     // Загрузка мероприятий
@@ -639,4 +709,318 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.classList.remove('navbar--hidden');
         }
         
-       
+        lastScrollY = currentScrollY;
+    });
+    
+    // Закрытие мобильного меню при клике вне его
+    document.addEventListener('click', function(e) {
+        if (isMenuOpen && navbar && !navbar.contains(e.target)) {
+            closeMobileMenu();
+        }
+    });
+    
+    // Слушаем изменения хэша
+    window.addEventListener('hashchange', activatePageFromHash);
+    
+    // Проверяем авто-редактирование при загрузке
+    setTimeout(() => {
+        checkAutoEditMode();
+    }, 1000);
+    
+    // Инициализируем приложение
+    initializeApp();
+    
+    console.log('Dashboard загружен!');
+});
+
+// Глобальные функции для кнопок
+async function registerForEvent(eventId) {
+    if (!await checkAuth()) {
+        alert('Пожалуйста, войдите в систему для записи на мероприятия');
+        return;
+    }
+    
+    try {
+        // Сначала пробуем записаться через базу данных
+        const response = await fetch('/php/apply_event.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ event_id: eventId })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            handleSuccessfulEventRegistration(eventId);
+        } else {
+            // Если не удалось через базу, пробуем через локальный менеджер
+            await registerForEventLocally(eventId);
+        }
+    } catch (error) {
+        console.error('Ошибка записи на мероприятие:', error);
+        // Пробуем локальную регистрацию как запасной вариант
+        await registerForEventLocally(eventId);
+    }
+}
+
+// Локальная регистрация на мероприятие
+async function registerForEventLocally(eventId) {
+    if (!window.eventManager) {
+        alert('Ошибка: менеджер мероприятий не доступен');
+        return;
+    }
+    
+    try {
+        const event = window.eventManager.events.find(e => e.id === eventId);
+        if (!event) {
+            alert('Мероприятие не найдено');
+            return;
+        }
+        
+        if (!event.participants) {
+            event.participants = [];
+        }
+        
+        const currentUser = await getCurrentUser();
+        if (!currentUser) {
+            alert('Пользователь не авторизован');
+            return;
+        }
+        
+        if (event.participants.includes(currentUser.username)) {
+            alert('Вы уже записаны на это мероприятие');
+            return;
+        }
+        
+        event.participants.push(currentUser.username);
+        
+        // Сохраняем обновленные данные
+        await window.eventManager.saveEventToDB(event);
+        
+        handleSuccessfulEventRegistration(eventId);
+        
+    } catch (error) {
+        console.error('Ошибка локальной регистрации:', error);
+        alert('Ошибка при записи на мероприятие');
+    }
+}
+
+// Обработка успешной регистрации на мероприятие
+function handleSuccessfulEventRegistration(eventId) {
+    alert('Вы успешно записались на мероприятие!');
+    
+    // Обновляем кнопку
+    const button = document.querySelector(`[onclick="registerForEvent('${eventId}')"]`);
+    if (button) {
+        button.textContent = 'Записан';
+        button.disabled = true;
+        button.classList.remove('button--primary');
+        button.classList.add('button--secondary');
+    }
+}
+
+async function applyForVacancy(vacancyId) {
+    if (!await checkAuth()) {
+        alert('Пожалуйста, войдите в систему для отклика на вакансии');
+        return;
+    }
+    
+    try {
+        // Сначала пробуем откликнуться через базу данных
+        const response = await fetch('/php/apply_vacancy.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({ vacancy_id: vacancyId })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            handleSuccessfulVacancyApplication(vacancyId);
+        } else {
+            // Если не удалось через базу, пробуем через локальный менеджер
+            await applyForVacancyLocally(vacancyId);
+        }
+    } catch (error) {
+        console.error('Ошибка отклика на вакансию:', error);
+        // Пробуем локальный отклик как запасной вариант
+        await applyForVacancyLocally(vacancyId);
+    }
+}
+
+// Локальный отклик на вакансию
+async function applyForVacancyLocally(vacancyId) {
+    if (!window.vacancyManager) {
+        alert('Ошибка: менеджер вакансий не доступен');
+        return;
+    }
+    
+    try {
+        const vacancy = window.vacancyManager.vacancies.find(v => v.id === vacancyId);
+        if (!vacancy) {
+            alert('Вакансия не найдена');
+            return;
+        }
+        
+        if (!vacancy.applicants) {
+            vacancy.applicants = [];
+        }
+        
+        const currentUser = await getCurrentUser();
+        if (!currentUser) {
+            alert('Пользователь не авторизован');
+            return;
+        }
+        
+        if (vacancy.applicants.includes(currentUser.username)) {
+            alert('Вы уже откликались на эту вакансию');
+            return;
+        }
+        
+        vacancy.applicants.push(currentUser.username);
+        
+        // Сохраняем обновленные данные
+        await window.vacancyManager.saveVacancyToDB(vacancy);
+        
+        handleSuccessfulVacancyApplication(vacancyId);
+        
+    } catch (error) {
+        console.error('Ошибка локального отклика:', error);
+        alert('Ошибка при отклике на вакансию');
+    }
+}
+
+// Обработка успешного отклика на вакансию
+function handleSuccessfulVacancyApplication(vacancyId) {
+    alert('Вы успешно откликнулись на вакансию!');
+    
+    // Обновляем кнопку
+    const button = document.querySelector(`[onclick="applyForVacancy('${eventId}')"]`);
+    if (button) {
+        button.textContent = 'Отклик отправлен';
+        button.disabled = true;
+        button.classList.remove('button--primary');
+        button.classList.add('button--secondary');
+    }
+}
+
+// Вспомогательная функция проверки авторизации
+async function checkAuth() {
+    try {
+        const response = await fetch('/php/check_current_user.php', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        
+        const result = await response.json();
+        return result.server.user_id && result.server.user_id !== 'not_set';
+    } catch (error) {
+        return false;
+    }
+}
+
+// Получение текущего пользователя
+async function getCurrentUser() {
+    try {
+        const response = await fetch('/php/check_current_user.php', {
+            method: 'GET',
+            credentials: 'include'
+        });
+        
+        const result = await response.json();
+        if (result.server.user_id && result.server.user_id !== 'not_set') {
+            return {
+                id: result.server.user_id,
+                username: result.server.username
+            };
+        }
+        return null;
+    } catch (error) {
+        return null;
+    }
+}
+
+// Форматирование даты
+function formatDate(dateString) {
+    if (!dateString) return '';
+    
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    } catch (error) {
+        return dateString;
+    }
+}
+
+// Функции для модальных окон создания
+function showCreateEventModal() {
+    // Проверяем права
+    if (!window.roleManager || !window.roleManager.canCreateEvents()) {
+        alert('Недостаточно прав для создания мероприятий');
+        return;
+    }
+    
+    // Здесь будет реализация модального окна создания мероприятия
+    alert('Функция создания мероприятия будет реализована позже');
+}
+
+function showCreateVacancyModal() {
+    // Проверяем права
+    if (!window.roleManager || !window.roleManager.canCreateVacancies()) {
+        alert('Недостаточно прав для создания вакансий');
+        return;
+    }
+    
+    // Здесь будет реализация модального окна создания вакансии
+    alert('Функция создания вакансии будет реализована позже');
+}
+
+// Добавляем класс RoleManager если он не существует
+if (typeof RoleManager === 'undefined') {
+    class RoleManager {
+        constructor() {
+            this.currentRole = 'user';
+            this.currentUsername = '';
+        }
+        
+        setRole(role) {
+            this.currentRole = role;
+        }
+        
+        setCurrentUser(username) {
+            this.currentUsername = username;
+        }
+        
+        canCreateEvents() {
+            return this.currentRole === 'organizer' || this.currentRole === 'admin';
+        }
+        
+        canCreateVacancies() {
+            return this.currentRole === 'organizer' || this.currentRole === 'admin';
+        }
+        
+        isAdmin() {
+            return this.currentRole === 'admin';
+        }
+        
+        isOrganizer() {
+            return this.currentRole === 'organizer';
+        }
+        
+        isUser() {
+            return this.currentRole === 'user';
+        }
+    }
+    
+    window.RoleManager = RoleManager;
+}
