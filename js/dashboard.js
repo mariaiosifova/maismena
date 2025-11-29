@@ -1,5 +1,7 @@
-// Упрощенный dashboard.js с интеграцией новых менеджеров
+// Упрощенный dashboard.js с интеграцией всех менеджеров
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Загружаем Dashboard...');
+
     // Основные элементы
     const navbar = document.querySelector('.navbar');
     const navLinks = document.querySelectorAll('.navbar__link');
@@ -7,22 +9,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('navbarToggle');
     const navbarMenu = document.getElementById('navbarMenu');
     
-    let lastScrollY = window.scrollY;
+    let currentPage = '';
     let isMenuOpen = false;
 
     // Инициализация приложения
     async function initializeApp() {
-        console.log('🚀 Инициализация приложения...');
-        
         try {
+            console.log('🔧 Инициализируем приложение...');
+            
             // Инициализируем менеджеры
             await initializeManagers();
             
             // Настраиваем навигацию
             setupNavigation();
-            
-            // Загружаем начальные данные
-            await loadInitialData();
             
             console.log('✅ Приложение инициализировано');
             
@@ -33,13 +32,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Инициализация менеджеров
     async function initializeManagers() {
+        console.log('🔧 Инициализируем менеджеры...');
+        
         // RoleManager уже создан глобально в role-manager.js
         if (typeof roleManager !== 'undefined') {
+            console.log('✅ RoleManager доступен');
+            // Ждем проверку роли
             await roleManager.checkUserRole();
-            console.log('✅ RoleManager инициализирован');
+        } else {
+            console.warn('⚠️ RoleManager не найден');
         }
         
-        // EventManager и VacancyManager уже созданы глобально в event-manager.js
+        // EventManager и VacancyManager уже созданы глобально
         if (typeof eventManager !== 'undefined') {
             console.log('✅ EventManager доступен');
         }
@@ -48,17 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('✅ VacancyManager доступен');
         }
         
-        // Инициализируем CreateFormsManager если он существует
-        if (typeof CreateFormsManager !== 'undefined') {
-            new CreateFormsManager();
-            console.log('✅ CreateFormsManager инициализирован');
-        }
+        // CreateFormsManager будет создан автоматически в своем файле
+        console.log('✅ CreateFormsManager будет инициализирован автоматически');
         
-        // Инициализируем CreateButtonsManager если он существует
-        if (typeof CreateButtonsManager !== 'undefined') {
-            new CreateButtonsManager();
-            console.log('✅ CreateButtonsManager инициализирован');
-        }
+        // CreateButtonsManager будет создан автоматически в своем файле
+        console.log('✅ CreateButtonsManager будет инициализирован автоматически');
     }
 
     // Настройка навигации
@@ -98,84 +96,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Скрытие навбара при скролле
-        window.addEventListener('scroll', function() {
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                navbar.classList.add('navbar--hidden');
-            } else {
-                navbar.classList.remove('navbar--hidden');
-            }
-            
-            lastScrollY = currentScrollY;
-        });
-
+        window.addEventListener('scroll', handleScroll);
+        
         // Закрытие меню при клике вне его
-        document.addEventListener('click', function(e) {
-            if (isMenuOpen && navbar && !navbar.contains(e.target)) {
-                closeMobileMenu();
-            }
-        });
+        document.addEventListener('click', handleOutsideClick);
 
         // Отслеживание изменений хэша
         window.addEventListener('hashchange', activatePageFromHash);
-    }
-
-    // Загрузка начальных данных
-    async function loadInitialData() {
-        console.log('📥 Загружаем начальные данные...');
-        
-        // Загружаем мероприятия и вакансии при активации соответствующих страниц
-        const currentPage = getCurrentPage();
-        
-        if (currentPage === 'events' || currentPage === 'topc') {
-            await loadEventsAndVacancies();
-        }
         
         // Проверяем авто-редактирование профиля
         checkAutoEditMode();
     }
 
-    // Загрузка мероприятий и вакансий
-    async function loadEventsAndVacancies() {
-        try {
-            // Используем существующие методы из CreateFormsManager
-            const formsManager = getFormsManager();
-            if (formsManager) {
-                await formsManager.loadExistingData();
-            } else {
-                // Альтернативная загрузка если CreateFormsManager не доступен
-                await loadEventsAndVacanciesFallback();
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
+    // Обработка скролла
+    function handleScroll() {
+        const currentScrollY = window.scrollY;
+        const lastScrollY = window.lastScrollY || 0;
+        
+        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+            navbar.classList.add('navbar--hidden');
+        } else {
+            navbar.classList.remove('navbar--hidden');
         }
+        
+        window.lastScrollY = currentScrollY;
     }
 
-    // Альтернативная загрузка данных
-    async function loadEventsAndVacanciesFallback() {
-        if (typeof eventManager !== 'undefined') {
-            await eventManager.loadEvents();
+    // Обработка клика вне меню
+    function handleOutsideClick(e) {
+        if (isMenuOpen && navbar && !navbar.contains(e.target)) {
+            closeMobileMenu();
         }
-        
-        if (typeof vacancyManager !== 'undefined') {
-            await vacancyManager.loadVacancies();
-        }
-    }
-
-    // Получение экземпляра CreateFormsManager
-    function getFormsManager() {
-        // Ищем существующий экземпляр или создаем новый
-        if (window.formsManager) {
-            return window.formsManager;
-        }
-        
-        if (typeof CreateFormsManager !== 'undefined') {
-            window.formsManager = new CreateFormsManager();
-            return window.formsManager;
-        }
-        
-        return null;
     }
 
     // Активация страницы
@@ -193,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (targetLink && targetPage) {
             targetLink.classList.add('navbar__link--active');
             targetPage.classList.add('active');
+            currentPage = pageId;
             
             // Загружаем данные для активной страницы
             handlePageActivation(pageId);
@@ -205,29 +157,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Обработка активации страницы
     function handlePageActivation(pageId) {
+        console.log('📄 Активирована страница:', pageId);
+        
         switch (pageId) {
             case 'events':
-                loadEventsData();
+                // Данные загружаются через CreateFormsManager
                 break;
             case 'topc':
-                loadVacanciesData();
+                // Данные загружаются через CreateFormsManager
                 break;
             case 'profile':
                 loadProfileData();
                 break;
         }
-    }
-
-    // Загрузка данных мероприятий
-    async function loadEventsData() {
-        console.log('📅 Загружаем данные мероприятий...');
-        // Данные уже загружаются через CreateFormsManager
-    }
-
-    // Загрузка данных вакансий
-    async function loadVacanciesData() {
-        console.log('💼 Загружаем данные вакансий...');
-        // Данные уже загружаются через CreateFormsManager
     }
 
     // Загрузка данных профиля
@@ -249,17 +191,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
     }
 
-    // Получение текущей страницы
-    function getCurrentPage() {
-        const activePage = document.querySelector('.page.active');
-        return activePage ? activePage.id : '';
-    }
-
     // Проверка авто-редактирования профиля
     function checkAutoEditMode() {
         const urlParams = new URLSearchParams(window.location.search);
         const firstLogin = urlParams.get('firstLogin');
         const autoEdit = urlParams.get('autoEdit');
+        
+        console.log('🔍 Проверка авто-редактирования:', { firstLogin, autoEdit });
         
         if (firstLogin === 'true' || autoEdit === 'true') {
             console.log('🔄 Включаем авто-редактирование профиля');
@@ -353,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🎯 Dashboard загружен и готов к работе!');
 });
 
-// Упрощенные глобальные функции для обратной совместимости
+// Глобальные функции для обратной совместимости
 async function registerForEvent(eventId) {
     console.log('📝 Регистрация на мероприятие:', eventId);
     
@@ -361,9 +299,14 @@ async function registerForEvent(eventId) {
     const formsManager = getFormsManager();
     if (formsManager && typeof formsManager.handleEventRegister === 'function') {
         const button = document.querySelector(`[data-event-id="${eventId}"] .event-card__register`);
-        formsManager.handleEventRegister(eventId, button);
+        if (button) {
+            formsManager.handleEventRegister(eventId, button);
+        } else {
+            console.error('❌ Кнопка регистрации не найдена');
+        }
     } else {
-        alert('Функция регистрации временно недоступна');
+        console.error('❌ CreateFormsManager не доступен');
+        showNotification('Функция регистрации временно недоступна', 'error');
     }
 }
 
@@ -374,15 +317,54 @@ async function applyForVacancy(vacancyId) {
     const formsManager = getFormsManager();
     if (formsManager && typeof formsManager.handleVacancyApply === 'function') {
         const button = document.querySelector(`[data-vacancy-id="${vacancyId}"] .vacancy-card__apply`);
-        formsManager.handleVacancyApply(vacancyId, button);
+        if (button) {
+            formsManager.handleVacancyApply(vacancyId, button);
+        } else {
+            console.error('❌ Кнопка отклика не найдена');
+        }
     } else {
-        alert('Функция отклика временно недоступна');
+        console.error('❌ CreateFormsManager не доступен');
+        showNotification('Функция отклика временно недоступна', 'error');
     }
 }
 
 // Вспомогательная функция для получения менеджера форм
 function getFormsManager() {
     return window.formsManager || (typeof CreateFormsManager !== 'undefined' ? new CreateFormsManager() : null);
+}
+
+// Универсальная функция показа уведомлений
+function showNotification(message, type = 'info') {
+    // Создаем элемент уведомления
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.className = `notification notification--${type}`;
+    
+    // Стили для уведомления
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007cba'};
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        max-width: 400px;
+        word-wrap: break-word;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Автоматическое удаление через 5 секунд
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 5000);
 }
 
 // Резервная инициализация если DOM уже загружен
