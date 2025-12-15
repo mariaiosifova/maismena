@@ -1,0 +1,207 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
+hr {
+  width: 50%;
+  opacity: 0.6;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.menu {
+  transition: all 0.3s ease;
+  z-index: 10;
+  position: absolute;
+  display: none;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, rgba(32, 32, 32, 0.9), rgba(48, 48, 48, 0.9));
+  top: 300px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 15px;
+  box-shadow: 0px 0px 200px rgba(32, 153, 252, 0.4);
+}
+.menu--body {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+.menu--body p {
+  font-size: 26px;
+  color: #fff;
+}
+.menu--body a {
+  font-size: 26px;
+  color: #fff;
+}
+.menu--body button {
+  padding: 10px;
+  background-color: #2099fc;
+  font-size: 20px;
+  border: 0px;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.body {
+  transition: all 0.3s ease;
+  z-index: 1;
+  gap: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #fff;
+}
+.body--content {
+  gap: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.body--content .content {
+  gap: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.body--content .content--header {
+  max-width: 700px;
+  background-color: #2099fc;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.body--content .content--header p {
+  color: #fff;
+  font-weight: 800;
+  font-size: 24px;
+}
+.body--content .content--body {
+  width: 100%;
+  display: grid;
+}
+@media (min-width: 0px) {
+  .body--content .content--body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    gap: 25px;
+  }
+}
+.body--content .content--body .container {
+  border-radius: 20px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body--content .content--body .container--body {
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 1000px;
+}
+@media (min-width: 0px) {
+  .body--content .content--body .container--body {
+    flex-direction: column;
+  }
+}
+@media (min-width: 1000px) {
+  .body--content .content--body .container--body {
+    flex-direction: row;
+  }
+}
+.body--content .content--body .container--body--title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+@media (min-width: 1000px) {
+  .body--content .content--body .container--body--title {
+    width: 50%;
+  }
+}
+.body--content .content--body .container--body--title--title {
+  font-weight: 600;
+  font-size: 20px;
+}
+.body--content .content--body .container--body--title--desc {
+  max-width: 80%;
+  font-weight: 300;
+  font-size: 20px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+          hyphens: auto;
+}
+.body--content .content--body .container--body--title p {
+  margin: 10px;
+}
+.body--content .content--body .container--body--title a {
+  margin: 10px;
+  color: #2099fc;
+  text-decoration-color: #2099fc;
+  transition: all 0.3s ease;
+}
+.body--content .content--body .container--body--title a:hover {
+  text-decoration: none;
+}
+.body--content .content--body .container--body--title button {
+  padding: 10px;
+  background-color: #2099fc;
+  font-size: 20px;
+  border: 0px;
+  border-radius: 20px;
+  color: #fff;
+}
+.body--content .content--body .container--image {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+}
+.body--content .content--body .container--image img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  border-radius: 20px;
+  width: 100%;
+  aspect-ratio: 1/1;
+}/*# sourceMappingURL=index.css.map */

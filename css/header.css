@@ -1,0 +1,122 @@
+.body--header {
+  height: 10vh;
+  min-height: 60px;
+  width: 100%;
+}
+.body--header a,
+.body--header li,
+.body--header ul,
+.body--header h1,
+.body--header p,
+.body--header div {
+  color: #fff;
+  font-weight: 650;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+}
+.body--header .header {
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-color: #161616;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+.body--header .header--left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  height: 100%;
+}
+.body--header .header--left--image {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.body--header .header--left--image img {
+  height: 100%;
+}
+.body--header .header--left--db {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  color: #fff;
+  font-weight: 650;
+  letter-spacing: -2px;
+  flex-grow: 1;
+  line-height: 1;
+  font-size: clamp(1.2rem, 4vw, 1.8rem);
+}
+.body--header .header--nb {
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+@media (max-width: 800px) {
+  .body--header .header--nb {
+    display: flex;
+  }
+}
+@media (min-width: 801px) {
+  .body--header .header--nb {
+    display: none;
+  }
+}
+.body--header .header--nb button {
+  background-color: rgba(32, 153, 252, 0.75);
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 20px;
+  border-radius: 10px;
+  border: 1px solid #fff;
+  cursor: pointer;
+}
+.body--header .header--nav {
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+@media (max-width: 800px) {
+  .body--header .header--nav {
+    display: none;
+  }
+}
+@media (min-width: 801px) {
+  .body--header .header--nav {
+    display: flex;
+  }
+}
+.body--header .header--nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  list-style: none;
+  gap: 10px;
+}
+.body--header .header--nav ul li {
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.body--header .header--nav ul li a {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+.body--header .header--nav ul li:hover {
+  background-color: #fff;
+}
+.body--header .header--nav ul li:hover a {
+  color: #2099fc;
+}/*# sourceMappingURL=header.css.map */

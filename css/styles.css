@@ -1,0 +1,642 @@
+/* ===== БАЗОВЫЕ СТИЛИ ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --container-padding: 3%;
+    --primary-color: #2099fc;
+    --secondary-color: rgb(208, 210, 211);
+    --background-color: rgb(241, 241, 241);
+    --text-color: #000000;
+    --header-bg: #161616;
+    --header-text: #dfdede;
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    background-color: var(--background-color);
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+.page {
+    min-height: 100vh;
+}
+
+.header {
+    background-color: var(--header-bg);
+    padding: 8px var(--container-padding);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 1);
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.header__logo {
+    margin-right: 15px;
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+
+.header__title {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 650;
+    letter-spacing: -2px;
+    color: var(--header-text);
+    flex-grow: 1;
+    line-height: 1;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+}
+
+.hero {
+    padding: 100px var(--container-padding) 20px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero__container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero__title {
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    font-weight: 650;
+    letter-spacing: -2px;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    line-height: 1.1;
+    text-align: left;
+}
+
+.hero__description {
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 25px;
+    line-height: 1.3;
+    text-align: left;
+    max-width: 600px;
+}
+
+.hero__actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.hero__subtitle {
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    font-weight: 500;
+    color: var(--text-color);
+    padding-top: 10%;
+    text-align: left;
+}
+
+.button {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 550;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.button--primary {
+    background-color: var(--primary-color);
+    color: #000000;
+    padding: 15px 30px;
+    font-size: 28px;
+}
+
+.button--primary:hover {
+    background-color: rgb(0, 0, 0);
+    color: #e4e2e2;
+    transform: translateY(-2px);
+}
+
+.button--secondary {
+    background-color: var(--secondary-color);
+    color: #000000;
+    padding: 15px 30px;
+    font-size: 28px;
+}
+
+.button--secondary:hover {
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* УВЕЛИЧИЛ кнопку Войти в шапке */
+.button--header-login {
+    background-color: rgb(220, 223, 227);
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-size: 18px;
+    color: #000000;
+    white-space: nowrap;
+}
+
+.button--header-login:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.button--large {
+    align-self: flex-start;
+}
+
+.photos-section {
+    padding: 60px var(--container-padding);
+    background-color: #ffffff;
+}
+
+.photos-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.photo-item {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    margin-bottom: 80px;
+}
+
+.photo-item--reverse {
+    flex-direction: row-reverse;
+}
+
+.photo-item:last-child {
+    margin-bottom: 0;
+}
+
+.photo-wrapper {
+    flex: 0 0 45%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.photo-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.photo-wrapper:hover .photo-image {
+    transform: scale(1.05);
+}
+
+.photo-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.photo-title {
+    font-size: 2rem;
+    font-weight: 650;
+    color: #000000;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.photo-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #666;
+    margin-bottom: 0;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 35px;
+    border-radius: 20px;
+    width: 450px;
+    max-width: 95%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    position: relative;
+    border: 2px solid #f0f0f0;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #000000;
+}
+
+.close {
+    color: #666;
+    float: right;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 25px;
+    top: 20px;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #000000;
+    font-size: 16px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    background-color: white;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(32, 153, 252, 0.1);
+}
+
+#registration-form .button,
+#login-form .button {
+    width: 100%;
+    padding: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 12px;
+    margin-top: 15px;
+    background-color: var(--primary-color);
+    color: #000000;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#registration-form .button:hover,
+#login-form .button:hover {
+    background-color: rgb(0, 0, 0);
+    color: #ffffff;
+}
+
+.field-error {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    max-width: 400px;
+    word-wrap: break-word;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    animation: slideInRight 0.3s ease;
+}
+
+.notification--success {
+    background: #28a745;
+    color: white;
+}
+
+.notification--error {
+    background: #dc3545;
+    color: white;
+}
+
+.notification--warning {
+    background: #ffc107;
+    color: black;
+}
+
+.notification--info {
+    background: #007cba;
+    color: white;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        --container-padding: 2%;
+    }
+}
+
+@media (min-width: 1920px) {
+    :root {
+        --container-padding: 10%;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --container-padding: 4%;
+    }
+    
+    .hero {
+        padding: 80px var(--container-padding) 20px;
+    }
+    
+    .hero__actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .button--large {
+        align-self: stretch;
+        text-align: center;
+    }
+    
+    .button--primary,
+    .button--secondary {
+        font-size: 26px;
+        padding: 14px 28px;
+    }
+    
+    .modal-content {
+        width: 90%;
+        margin: 10% auto;
+        padding: 30px;
+    }
+    
+    .photo-item {
+        flex-direction: column;
+        gap: 30px;
+        margin-bottom: 50px;
+        text-align: center;
+    }
+    
+    .photo-item--reverse {
+        flex-direction: column;
+    }
+    
+    .photo-wrapper {
+        flex: none;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .photo-image {
+        height: 300px;
+    }
+    
+    .photo-content {
+        padding: 0;
+    }
+    
+    .photo-title {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+    }
+    
+    .photo-description {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --container-padding: 3%;
+    }
+    
+    .header {
+        height: auto;
+        min-height: 60px;
+        padding: 8px var(--container-padding);
+    }
+    
+    .header__title {
+        font-size: 1.5rem;
+        letter-spacing: -1px;
+    }
+    
+    .hero {
+        padding: 70px var(--container-padding) 15px;
+    }
+    
+    .button--primary,
+    .button--secondary {
+        font-size: 24px;
+        padding: 12px 25px;
+    }
+    
+    .button--secondary {
+        width: auto;
+        min-width: 120px;
+        padding: 12px 20px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 15% auto;
+        padding: 25px;
+    }
+    
+    .modal-content h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+    
+    .form-group input {
+        padding: 12px;
+    }
+    
+    #registration-form .button,
+    #login-form .button {
+        padding: 16px;
+        font-size: 17px;
+    }
+    
+    .photos-section {
+        padding: 30px var(--container-padding);
+    }
+    
+    .photo-item {
+        margin-bottom: 40px;
+        gap: 20px;
+    }
+    
+    .photo-image {
+        height: 250px;
+    }
+    
+    .photo-title {
+        font-size: 1.4rem;
+    }
+    
+    .photo-description {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 320px) {
+    :root {
+        --container-padding: 2%;
+    }
+    
+    .hero__title {
+        font-size: 2.5rem;
+    }
+    
+    .hero__description {
+        font-size: 1.2rem;
+    }
+    
+    .button--primary,
+    .button--secondary {
+        font-size: 22px;
+        padding: 10px 22px;
+    }
+    
+    .button--secondary {
+        min-width: 110px;
+        padding: 10px 18px;
+    }
+    
+    .header__title {
+        font-size: 1.4rem;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        margin: 10% auto;
+    }
+    
+    .photos-section {
+        padding: 20px var(--container-padding);
+    }
+    
+    .photo-item {
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .photo-image {
+        height: 200px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 60px var(--container-padding) 15px;
+        min-height: auto;
+    }
+    
+    .modal-content {
+        margin: 2% auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}

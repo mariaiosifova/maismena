@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+.classButton {
+    background-color: rgba(32, 153, 252, 0.75);
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #fff;
+    cursor: pointer;
+}
+
+body {
+    min-height: 100vh;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.menu {
+    transition: all 0.3s ease;
+    z-index: 10;
+    position: absolute;
+    display: none;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, rgba(32, 32, 32, 0.9), rgba(48, 48, 48, 0.9));
+    top: 300px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    box-shadow: 0px 0px 200px rgba(32, 153, 252, 0.4);
+}
+
+.menu--body {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+}
+
+.menu--body p {
+    font-size: 26px;
+    color: #fff;
+}
+
+.menu--body a {
+    font-size: 26px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.menu--body button {
+    padding: 10px;
+    background-color: #2099fc;
+    font-size: 20px;
+    border: 0px;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.body {
+    transition: all 0.3s ease;
+    z-index: 1;
+    gap: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #fff;
+}
+
+.body--content {
+    gap: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content {
+    gap: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.content--header {
+    max-width: 700px;
+    background-color: #2099fc;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.content--header p {
+    color: #fff;
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.content--header span {
+    color: #000;
+    font-weight: 900;
+}
+
+.content--body {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+.container {
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container--body {
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    box-sizing: border-box;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-width: 500px;
+    width: 100%;
+}
+
+.auth-tabs {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px 10px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    color: #2099fc;
+    background-color: rgba(32, 153, 252, 0.1);
+}
+
+.tab-btn.active {
+    color: #2099fc;
+    border-bottom-color: #2099fc;
+    background-color: rgba(32, 153, 252, 0.1);
+}
+
+/* Контейнер форм */
+.auth-container {
+    width: 100%;
+    position: relative;
+    min-height: 400px;
+}
+
+.auth-form {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-header h3 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2099fc;
+    box-shadow: 0 0 0 3px rgba(32, 153, 252, 0.2);
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 40px;
+    cursor: pointer;
+    color: #666;
+}
+
+.password-toggle:hover {
+    color: #2099fc;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox input {
+    width: 18px;
+    height: 18px;
+    accent-color: #2099fc;
+}
+
+.checkbox span {
+    color: #666;
+}
+
+.forgot-password {
+    color: #2099fc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.telegram-btn {
+    background: linear-gradient(135deg, #2099fc, #0088cc);
+    color: white;
+}
+
+.telegram-btn:hover {
+    background: linear-gradient(135deg, #0088cc, #2099fc);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(32, 153, 252, 0.3);
+}
+
+.login-btn {
+    background: linear-gradient(135deg, #2099fc, #0056b3);
+    color: white;
+}
+
+.login-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #2099fc);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(32, 153, 252, 0.3);
+}
+
+.register-btn {
+    background: linear-gradient(135deg, #28a745, #2099fc);
+    color: white;
+}
+
+.register-btn:hover {
+    background: linear-gradient(135deg, #2099fc, #28a745);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(32, 153, 252, 0.3);
+}
+
+.telegram-placeholder {
+    background: linear-gradient(135deg, rgba(32, 153, 252, 0.1), rgba(0, 136, 204, 0.1));
+    border: 2px dashed #2099fc;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.telegram-placeholder i {
+    color: #2099fc;
+    margin-bottom: 15px;
+}
+
+.telegram-placeholder p {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.telegram-placeholder small {
+    color: #666;
+    font-size: 14px;
+}
+
+.form-note {
+    margin-top: 15px;
+    color: #666;
+    font-size: 12px;
+    text-align: center;
+    font-style: italic;
+}
+
+.auth-footer {
+    margin-top: 30px;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.auth-footer p {
+    color: #666;
+}
+
+.auth-footer a {
+    color: #2099fc;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .auth-tabs {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .tab-btn {
+        padding: 12px;
+        justify-content: flex-start;
+    }
+    
+    .form-header h3 {
+        font-size: 20px;
+    }
+    
+    .container--body {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content--header p {
+        font-size: 18px;
+    }
+    
+    .tab-btn {
+        font-size: 14px;
+    }
+    
+    .auth-btn {
+        padding: 12px;
+        font-size: 16px;
+    }
+}
