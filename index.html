@@ -8,7 +8,6 @@
     <title>МАИ Смена</title>
     <link rel="icon" type="image/png" href="images/mai_logo.png">
     <link rel="stylesheet" href="css/styles.css?v=43">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="маи, маи смена, смена, работа, маи работа, топс, маи топс, москва работа, вакансии маи">
 </head>
@@ -16,118 +15,61 @@
 <body>
     <div class="page">
         <!-- Шапка -->
-        <!-- Навигационная панель -->
-<nav class="navbar">
-    <div class="navbar__container">
-        <div class="navbar__logo">
-            <img src="images/mai_logo.png" alt="МАИ Смена" width="32" height="32">
-            <span class="navbar__title">МАИ Смена</span>
-        </div>
-        
-        <!-- Кнопка гамбургера ДОЛЖНА БЫТЬ здесь -->
-        <button class="navbar__toggle" id="navbarToggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        
-        <!-- Меню ДОЛЖНО БЫТЬ здесь -->
-        <div class="navbar__menu" id="navbarMenu">
-            <a href="#events" class="navbar__link navbar__link--active">Лента мероприятий</a>
-            <a href="#topc" class="navbar__link">ТОПс Вакансии</a>
-            <a href="#leaderboard" class="navbar__link">Лидерборд</a>
-            <a href="#profile" class="navbar__link">Личный кабинет</a>
-        </div>
-        
-        <div class="navbar__right">
-            <div class="navbar__coins">
-                <span class="coins__icon">🪙</span>
-                <span class="coins__amount">150 MAIPoints</span>
+        <header class="header">
+            <div class="header__container">
+                <img class="header__logo" src="images/mai_logo.png" alt="Логотип МАИ Смена" width="50" height="50">
+                <h1 class="header__title">МАИ Смена</h1>
             </div>
-        </div>
-    </div>
-</nav>
+        </header>
 
-         <main id="app">
-            <!-- Основной контент -->
-        <main class="main">
+        <main id="app">
             <section class="hero">
                 <div class="hero__container">
                     <h1 class="hero__title">Добро пожаловать в МАИ Смена!</h1>
                     <p class="hero__description">Сервис позволяет удобно искать вакансии и записываться на них</p>
                     
                     <div class="hero__actions">
-                        <button class="button button--primary button--large" id="reg-btn">Зарегистрироваться</button>
-                        <button class="button button--secondary button--large">Войти</button>
-                        <button class="button button--tgreg button--large">TG-регистрация</button>
+                        <button class="button button--primary button--large" onclick="window.location.href='/login/'">Начать</button>
                     </div>
                     
                     <h2 class="hero__subtitle">Возможности сервиса:</h2>
                 </div>
             </section>
-        </main>
-        <!-- После секции hero, перед подключением скриптов -->
-<section class="photos-section">
-    <div class="photos-container">
-        <!-- Фото 1 -->
-        <div class="photo-item">
-            <div class="photo-wrapper">
-                <img src="images/photo1.jpg" alt="Фото 1" class="photo-image">
-            </div>
-            <div class="photo-content">
-                <h3 class="photo-title">Описание фото 1</h3>
-                <p class="photo-description">Здесь будет описание первой фотографии</p>
-            </div>
-        </div>
-        
-        <!-- Фото 2 -->
-        <div class="photo-item photo-item--reverse">
-            <div class="photo-wrapper">
-                <img src="images/photo2.jpg" alt="Фото 2" class="photo-image">
-            </div>
-            <div class="photo-content">
-                <h3 class="photo-title">Описание фото 2</h3>
-                <p class="photo-description">Здесь будет описание второй фотографии</p>
-            </div>
-        </div>
-        
-        <!-- Фото 3 -->
-        <div class="photo-item">
-            <div class="photo-wrapper">
-                <img src="images/photo3.jpg" alt="Фото 3" class="photo-image">
-            </div>
-            <div class="photo-content">
-                <h3 class="photo-title">Описание фото 3</h3>
-                <p class="photo-description">Здесь будет описание третьей фотографии</p>
-            </div>
-        </div>
-    </div>
-</section>
 
-        <!-- Подключаем конфиг ПЕРВЫМ -->
-    <script src="js/carousel.js?v=27"></script>
-    <script src="js/main.js?v=27"></script>
+            <section class="photos-section">
+                <div class="photos-container">
+                    <div class="photo-item">
+                        <div class="photo-wrapper">
+                            <img src="images/photo1.jpg" alt="Мероприятия МАИ" class="photo-image">
+                        </div>
+                        <div class="photo-content">
+                            <h3 class="photo-title">Мероприятия и события</h3>
+                            <p class="photo-description">Участвуйте в хакатонах, встречах с работодателями и культурных событиях университета. Регистрируйтесь на интересующие мероприятия в один клик.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="photo-item photo-item--reverse">
+                        <div class="photo-wrapper">
+                            <img src="images/photo2.jpg" alt="Вакансии для студентов" class="photo-image">
+                        </div>
+                        <div class="photo-content">
+                            <h3 class="photo-title">Вакансии ТОПс</h3>
+                            <p class="photo-description">Найдите подработку или стажировку прямо в университете. Работайте в удобное время и получайте MAIcoins за выполненную работу.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="photo-item">
+                        <div class="photo-wrapper">
+                            <img src="images/photo3.jpg" alt="Сообщество МАИ" class="photo-image">
+                        </div>
+                        <div class="photo-content">
+                            <h3 class="photo-title">Сообщество и рейтинг</h3>
+                            <p class="photo-description">Соревнуйтесь с другими студентами, зарабатывайте баллы активности и поднимайтесь в рейтинге самых активных студентов МАИ.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
-
-    <!-- Модальное окно регистрации -->
-<div id="registration-modal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Регистрация</h2>
-        <form id="registration-form">
-            <div class="form-group">
-                <label for="username">Логин:</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Пароль:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="button button--primary">Зарегистрироваться</button>
-        </form>
-    </div>
-</div>
-    
 </body>
 </html>
